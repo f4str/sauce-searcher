@@ -2,45 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { Container, Input, Tab, Segment } from 'semantic-ui-react';
 
 const panes = [
-	{ menuItem: 'Auto', searchText: 'Search using u/robaragi patterns' },
-	{ menuItem: 'Anime', searchText: 'Search by anime name' },
-	{ menuItem: 'Manga', searchText: 'Search by manga name' },
-	{ menuItem: 'Visual Novel', searchText: 'Search by visual novel name' },
-	{ menuItem: 'Doujin', searchText: 'Search by 6 digits' },
+	{ menuItem: 'Auto', placeholder: 'Search using u/robaragi patterns' },
+	{ menuItem: 'Anime', placeholder: 'Search by anime name' },
+	{ menuItem: 'Manga', placeholder: 'Search by manga name' },
+	{ menuItem: 'Visual Novel', placeholder: 'Search by visual novel name' },
+	{ menuItem: 'Doujin', placeholder: 'Search by 6 digits' },
 ];
 
-function Search() {
-	const [index, setIndex] = useState(0);
-	const [searchText, setSearchText] = useState('Search');
-	const [inputText, setInputText] = useState('');
+function Search({index, setIndex, query, setQuery, handleClick}) {
+	const [placeholder, setPlaceholder] = useState('Search');
 	
 	useEffect(() => {
-		setSearchText(panes[index].searchText)
+		setPlaceholder(panes[index].placeholder)
 	}, [index]);
 	
 	const handleTabChange = (e, { activeIndex }) => {
 		setIndex(activeIndex);
-	}
+	};
 	
 	const handleInputChange = (e) => {
-		setInputText(e.target.value);
-	}
-	
-	const handleClick = () => {
-		
-	}
+		setQuery(e.target.value);
+	};
 	
 	return (
 		<Container style={{ width: '50%' }}>
 			<Segment inverted 
-				style={{overflow: 'auto', maxHeight: '50vh', margin: 'auto', padding: '1px' }}>
+				style={{overflow: 'auto', margin: 'auto', padding: '1px' }}>
 				<Tab panes={panes} 
-					style={{
-						color: 'white',
-						margin: 'auto',
-					}}
 					menu={{
-						borderless: true,
 						attached: true,
 						tabular: true,
 						inverted: true,
@@ -53,15 +42,12 @@ function Search() {
 					icon: 'search',
 					onClick: () => {handleClick()}
 				}} 
-				style={{
-					width: '100%',
-				}}
-				size='medium' 
-				placeholder={searchText}
+				style={{ width: '100%' }}
+				size='small' 
+				placeholder={placeholder}
 				inverted 
 				onChange={handleInputChange} 
 			/>
-			{ inputText }
 		</Container>
 	)
 }

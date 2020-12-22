@@ -2,7 +2,9 @@ import React from 'react';
 
 function Manga() {
 	return (
-		<div></div>
+		<div>
+			Manga result
+		</div>
 	)
 }
 
