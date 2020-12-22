@@ -1,14 +1,14 @@
 import React from 'react';
 import { Header } from 'semantic-ui-react'
 
-function Heading() {
+function Title({title}) {
 	return (
 		<div>
 			<Header size='huge' inverted style={{ margin: '30px' }}>
-				Sauce Searcher
+				{title}
 			</Header>
 		</div>
 	)
 }
 
-export default Heading;
+export default Title;
