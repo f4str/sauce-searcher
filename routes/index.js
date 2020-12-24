@@ -20,7 +20,7 @@ router.get('/anime/:query(*)', async (req, res) => {
 			const id = results[0]['mal_id'];
 			const url = `https://api.jikan.moe/v3/anime/${id}`;
 			const response = await axios.get(url);
-			const anime = response.data;
+			const anime = parser.parseAnime(response.data);
 			res.status(200).send(anime);
 		}
 		else {
@@ -43,7 +43,7 @@ router.get('/manga/:query(*)', async (req, res) => {
 			const id = results[0]['mal_id'];
 			const url = `https://api.jikan.moe/v3/manga/${id}`;
 			const response = await axios.get(url);
-			const manga = response.data;
+			const manga = parser.parseManga(response.data);
 			res.status(200).send(manga);
 		}
 		else {
@@ -64,8 +64,8 @@ router.get('/vn/:query(*)', async (req, res) => {
 		const response = await vndb.query(query);
 		const results = response['items'];
 		if (results && results.length > 0) {
-			const vn = results[0]
-			res.status(200).send(parser.parseVisualNovel(vn));
+			const vn = parser.parseVisualNovel(results[0])
+			res.status(200).send(vn);
 		}
 		else {
 			res.status(404).send('visual novel not found');
