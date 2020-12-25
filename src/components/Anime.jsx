@@ -1,41 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
-function Anime({query}) {
-	const [result, setResult] = useState(null);
+const api = process.env.REACT_APP_API_SERVER;
+
+const Anime = forwardRef(({query, active}, ref) => {
+	const [found, setFound] = useState(false);
+	const [message, setMessage] = useState('');
 	
-	const search = async () => {
-		try {
-			const url = `https://api.jikan.moe/v3/search/anime?q=${query}`;
-			const response = await fetch(url);
-			const json = await response.json();
-			const results = json['results'];
-			if (results && results.length > 0) {
-				const id = results[0]['mal_id'];
-				const url = `https://api.jikan.moe/v3/anime/${id}`;
-				const response = await fetch(url);
-				const json = await response.json();
-				setResult(JSON.stringify(json));
-			}
-			else {
-				setResult("anime not found");
-			}
+	const fetchAnimeData = async () => {
+		setMessage('');
+		setFound(false);
+		const response = await fetch(`${api}/anime/${query}`);
+		if (response.status === 200) {
+			const data = await response.json();
+			setFound(true);
 		}
-		catch (err) {
-			alert(err);
-			setResult("");
+		else {
+			setFound(false);
+			setMessage('anime not found');
 		}
-		
 	};
 	
-	useEffect(() => {
-		search();
+	useImperativeHandle(ref, () => {
+		return {
+			fetchAnimeData: fetchAnimeData
+		}
 	});
 	
 	return (
 		<div>
-			{result}
+			{ active === 'anime' ? found ?
+			"anime found"
+			: message : null }
 		</div>
 	)
-}
+});
 
 export default Anime;
