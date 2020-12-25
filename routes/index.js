@@ -123,7 +123,6 @@ router.get('/doujin/:id', async (req, res) => {
 		res.status(200).send(doujin);
 	}
 	catch (err) {
-		console.log(err);
 		res.status(404).send('doujin not found');
 	}
 });
