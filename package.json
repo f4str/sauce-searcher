@@ -1,6 +1,8 @@
 {
   "name": "sauce-searcher",
+  "homepage": "https://github.com/f4str/sauce-searcher",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "react": "^17.0.1",
@@ -32,6 +34,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }
