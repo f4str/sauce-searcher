@@ -21,10 +21,15 @@ const Doujin = forwardRef(({query, active}, ref) => {
 	const [categories, setCategories] = useState([]);
 	const [url, setUrl] = useState('');
 	
-	const fetchDoujinData = async () => {
+	const fetchData = async () => {
 		setMessage('');
 		setFound(false);
-		const response = await fetch(`${api}/doujin/${query}`);
+		
+		const first = query.charAt(0);
+		const last = query.slice(-1);
+		const search = first === '(' && last === ')' ? query.slice(1, -1) : query;
+		
+		const response = await fetch(`${api}/doujin/${search}`);
 		if (response.status === 200) {
 			const data = await response.json();
 			setFound(true);
@@ -50,7 +55,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 	
 	useImperativeHandle(ref, () => {
 		return {
-			fetchDoujinData: fetchDoujinData
+			fetchData: fetchData
 		}
 	});
 	
@@ -59,7 +64,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 			{ active === 'doujin' ? found ?
 			<Grid columns={1} textAlign='left'>
 				<Grid.Column>
-					ID: {id}
+					ID: {id}, {url}
 				</Grid.Column>
 				<Grid.Column>
 					Title: {title}
