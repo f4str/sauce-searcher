@@ -6,13 +6,21 @@ const Anime = forwardRef(({query, active}, ref) => {
 	const [found, setFound] = useState(false);
 	const [message, setMessage] = useState('');
 	
-	const fetchAnimeData = async () => {
+	const [result, setResult] = useState(null);
+	
+	const fetchData = async () => {
 		setMessage('');
 		setFound(false);
-		const response = await fetch(`${api}/anime/${query}`);
+		
+		const first = query.charAt(0);
+		const last = query.slice(-1);
+		const search = first === '{' && last === '}' ? query.slice(1, -1) : query;
+		
+		const response = await fetch(`${api}/anime/${search}`);
 		if (response.status === 200) {
 			const data = await response.json();
 			setFound(true);
+			setResult(JSON.stringify(data));
 		}
 		else {
 			setFound(false);
@@ -22,14 +30,14 @@ const Anime = forwardRef(({query, active}, ref) => {
 	
 	useImperativeHandle(ref, () => {
 		return {
-			fetchAnimeData: fetchAnimeData
+			fetchData: fetchData
 		}
 	});
 	
 	return (
 		<div>
 			{ active === 'anime' ? found ?
-			"anime found"
+			result
 			: message : null }
 		</div>
 	)
