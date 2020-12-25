@@ -6,7 +6,7 @@ const VNDB = require('vndb-api');
 const parser = require('./parser');
 
 
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
 	res.send('server is running');
 });
 
@@ -40,11 +40,17 @@ router.get('/manga/:query(*)', async (req, res) => {
 		const query = response.data;
 		const results = query['results'];
 		if (results && results.length > 0) {
-			const id = results[0]['mal_id'];
-			const url = `https://api.jikan.moe/v3/manga/${id}`;
-			const response = await axios.get(url);
-			const manga = parser.parseManga(response.data);
-			res.status(200).send(manga);
+			const result = results.find(x => x['type'] == 'Manga');
+			if (result) {
+				const id = result['mal_id'];
+				const url = `https://api.jikan.moe/v3/manga/${id}`;
+				const response = await axios.get(url);
+				const manga = parser.parseManga(response.data);
+				res.status(200).send(manga);
+			}
+			else {
+				res.status(404).send('manga not found');
+			}
 		}
 		else {
 			res.status(404).send('manga not found');
@@ -53,6 +59,35 @@ router.get('/manga/:query(*)', async (req, res) => {
 	catch (err) {
 		console.log(err);
 		res.status(404).send('manga not found');
+	}
+});
+
+router.get('/ln/:query(*)', async (req, res) => {
+	try {
+		const url = `https://api.jikan.moe/v3/search/manga?q=${req.params.query}`;
+		const response = await axios.get(url);
+		const query = response.data;
+		const results = query['results'];
+		if (results && results.length > 0) {
+			const result = results.find(x => x['type'] == 'Light Novel');
+			if (result) {
+				const id = result['mal_id'];
+				const url = `https://api.jikan.moe/v3/manga/${id}`;
+				const response = await axios.get(url);
+				const ln = parser.parseManga(response.data);
+				res.status(200).send(ln);
+			}
+			else {
+				res.status(404).send('light novel not found');
+			}
+		}
+		else {
+			res.status(404).send('light novel not found');
+		}
+	}
+	catch (err) {
+		console.log(err);
+		res.status(404).send('light novel not found');
 	}
 });
 
@@ -91,6 +126,10 @@ router.get('/doujin/:id', async (req, res) => {
 		console.log(err);
 		res.status(404).send('doujin not found');
 	}
+});
+
+router.get('*', (req, res) => {
+	res.status(404).send('invalid route');
 });
 
 module.exports = router;
