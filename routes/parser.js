@@ -136,7 +136,7 @@ function parseDoujin(data) {
 		id: data['id'],
 		title: data['title']['pretty'],
 		full_title: data['title']['english'],
-		pages: data['pages'],
+		pages: data['num_pages'],
 		upload_date: new Date(data['upload_date'] * 1e3),
 		tags: [],
 		languages: [],
