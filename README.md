@@ -1,6 +1,6 @@
 # Sauce Searcher Server
 
-Express server used to perform HTTP GET requests to get JSON search results for anime, manga, visual novels, and doujins.
+Express server used to perform HTTP GET requests to get JSON search results for anime, manga, light novels, visual novels, and doujins.
 
 ## Installation
 
@@ -43,8 +43,7 @@ The server will start on port http://localhost5000 if a specific port has not be
 
 ## Making API calls
 
-You can make API calls to search for anime, manga, visual novels, and doujins using the appropriate routes described below. Spaces and special characters are allowed. 
-
+You can make API calls to search for anime, manga, light novels, visual novels, and doujins using the appropriate routes described below. Spaces and special characters are allowed. 
 
 ### Anime: 
 
@@ -61,6 +60,14 @@ http://localhost/manga/[name]
 ```
 
 Ex: `http://localhost/manga/fullmetal alchemist`
+
+### Light Novels
+
+```
+http://localhost/ln/[name]
+```
+
+Ex: `http://localhost/ln/overlord`
 
 ### Visual Novels
 
