@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
-function Manga({query}) {
+function LightNovel({query}) {
 	const [result, setResult] = useState(null);
 	
 	return (
@@ -10,4 +10,4 @@ function Manga({query}) {
 	)
 }
 
-export default Manga;
+export default LightNovel;

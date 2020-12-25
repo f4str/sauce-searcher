@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
-function VisualNovel() {
+function VisualNovel({query}) {
+	const [result, setResult] = useState(null);
+	
 	return (
 		<div>
-			Visual novel result
+			{result}
 		</div>
 	)
 }

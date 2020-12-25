@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Container, Input, Tab, Segment } from 'semantic-ui-react';
 
 const panes = [
-	{ menuItem: 'Auto', placeholder: 'Search using u/robaragi patterns' },
+	{ menuItem: 'Auto', placeholder: '{anime}, <manga>, [light novel], |visual novel|, (doujin)' },
 	{ menuItem: 'Anime', placeholder: 'Search by anime name' },
 	{ menuItem: 'Manga', placeholder: 'Search by manga name' },
+	{ menuItem: 'Light Novel', placeholder: 'Search by light novel name' },
 	{ menuItem: 'Visual Novel', placeholder: 'Search by visual novel name' },
-	{ menuItem: 'Doujin', placeholder: 'Search by 6 digits' },
+	{ menuItem: 'Doujin', placeholder: 'Search by doujin digits' },
 ];
 
-function Search({index, setIndex, query, setQuery, handleClick}) {
+function Search({index, setIndex, setQuery, handleClick}) {
 	const [placeholder, setPlaceholder] = useState('Search');
 	
 	useEffect(() => {
@@ -23,6 +24,12 @@ function Search({index, setIndex, query, setQuery, handleClick}) {
 	const handleInputChange = (e) => {
 		setQuery(e.target.value);
 	};
+	
+	const handleKeyDown = (e) => {
+		if (e.key === 'Enter') {
+			handleClick();
+		}
+	}
 	
 	return (
 		<Container style={{ width: '50%' }}>
@@ -47,6 +54,7 @@ function Search({index, setIndex, query, setQuery, handleClick}) {
 				placeholder={placeholder}
 				inverted 
 				onChange={handleInputChange} 
+				onKeyDown={handleKeyDown}
 			/>
 		</Container>
 	)
