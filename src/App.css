@@ -1,9 +1,26 @@
 .App {
 	text-align: center;
-	background-color: #282c34;
+	background-color: #16181d;
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	font-size: calc(5px + 2vmin);
+	font-size: calc(3px + 2vmin);
 	color: white;
+}
+
+.smaller-font {
+	font-size: calc(2px + 2vmin);
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+.link {
+	text-decoration: underline;
+	color: inherit;
 }

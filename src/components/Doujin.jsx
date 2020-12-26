@@ -9,7 +9,6 @@ const Doujin = forwardRef(({query, active}, ref) => {
 	
 	const [id, setId] = useState(0);
 	const [title, setTitle] = useState('');
-	const [fullTitle, setFullTitle] = useState('');
 	const [uploadDate, setUploadDate] = useState('');
 	const [pages, setPages] = useState(0);
 	const [characters, setCharacters] = useState([]);
@@ -35,7 +34,6 @@ const Doujin = forwardRef(({query, active}, ref) => {
 			setFound(true);
 			setId(data['id']);
 			setTitle(data['title']);
-			setFullTitle(data['full_title']);
 			setUploadDate(data['upload_date']);
 			setPages(data['pages']);
 			setCharacters(data['characters']);
@@ -59,46 +57,39 @@ const Doujin = forwardRef(({query, active}, ref) => {
 		}
 	});
 	
+	const arrayGridColumn = (name, array) => {
+		if (array && array.length > 0) {
+			return <Grid.Column><span className='bold'>{name}</span>{array.join(', ')}</Grid.Column>
+		}
+		else {
+			return null;
+		}
+	}
+	
 	return (
 		<div>
 			{ active === 'doujin' ? found ?
 			<Grid columns={1} textAlign='left'>
 				<Grid.Column>
-					ID: {id}, {url}
+					<a className='bold link' href={url}>{id}</a>
 				</Grid.Column>
 				<Grid.Column>
-					Title: {title}
+					<span className='bold'>Title:</span> {title}
 				</Grid.Column>
 				<Grid.Column>
-					Full Title: {fullTitle}
+					<span className='bold'>Pages:</span> {pages}
 				</Grid.Column>
 				<Grid.Column>
-					Pages: {pages}
+					<span className='bold'>Upload Date: </span> 
+					{new Date(uploadDate).toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'})}
 				</Grid.Column>
-				<Grid.Column>
-					Upload Date: {uploadDate}
-				</Grid.Column>
-				<Grid.Column>
-					Characters: {characters.join(', ')}
-				</Grid.Column>
-				<Grid.Column>
-					Parodies: {parodies.join(', ')}
-				</Grid.Column>
-				<Grid.Column>
-					Tags: {tags.join(', ')}
-				</Grid.Column>
-				<Grid.Column>
-					Artists: {artists.join(', ')}
-				</Grid.Column>
-				<Grid.Column>
-					Groups: {groups.join(', ')}
-				</Grid.Column>
-				<Grid.Column>
-					Languages: {languages.join(', ')}
-				</Grid.Column>
-				<Grid.Column>
-					Categories: {categories.join(', ')}
-				</Grid.Column>
+				{arrayGridColumn('Characters: ', characters)}
+				{arrayGridColumn('Parodies: ', parodies)}
+				{arrayGridColumn('Tags: ', tags)}
+				{arrayGridColumn('Artists: ', artists)}
+				{arrayGridColumn('Groups: ', groups)}
+				{arrayGridColumn('Languages: ', languages)}
+				{arrayGridColumn('Categories: ', categories)}
 			</Grid> 
 			: message : null }
 		</div>
