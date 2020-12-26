@@ -90,10 +90,10 @@ const LightNovel = forwardRef(({query, active}, ref) => {
 						}} />
 					</Grid.Column>
 					<Grid.Column largeScreen={10} tablet={9} mobile={9}>
-						<Grid.Row>
+						<Grid.Row style={{marginBottom: '10px'}}>
 							<a href={url} className='link'><Header inverted textAlign='left'>{title}</Header></a>
 						</Grid.Row>
-						{textGridRow('', titleEnglish)}
+						{textGridRow('English Title: ', titleEnglish)}
 						<Grid.Row style={{marginBottom: '10px'}}>
 							<span className='bold'>Type: </span>{type} | <span className='bold'>Status: </span>{status}
 						</Grid.Row>

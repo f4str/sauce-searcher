@@ -45,10 +45,10 @@ const Anime = forwardRef(({query, active}, ref) => {
 			setImageUrl(data['image']);
 			setType(data['type']);
 			setSource(data['source']);
-			setEpisodes(data['episodes']);
+			setEpisodes(data['episodes'] ? data['episodes'] : '?');
 			setStatus(data['status']);
 			setPremiered(data['premiered']);
-			setAired(data['aired'] ? data['aired']['string'] : '');
+			setAired(data['aired'] ? data['aired']['string'] : '?');
 			setDuration(data['duration']);
 			setRating(data['rating']);
 			setScore(data['score']);
@@ -94,10 +94,10 @@ const Anime = forwardRef(({query, active}, ref) => {
 						}} />
 					</Grid.Column>
 					<Grid.Column largeScreen={10} tablet={9} mobile={9}>
-						<Grid.Row>
+						<Grid.Row style={{marginBottom: '10px'}}>
 							<a href={url} className='link'><Header inverted textAlign='left'>{title}</Header></a>
 						</Grid.Row>
-						{textGridRow('', titleEnglish)}
+						{textGridRow('English Title: ', titleEnglish)}
 						<Grid.Row style={{marginBottom: '10px'}}>
 							<span className='bold'>Type: </span>{type} | <span className='bold'>Episodes: </span>{episodes}
 						</Grid.Row>
@@ -122,15 +122,19 @@ const Anime = forwardRef(({query, active}, ref) => {
 					</Grid.Column>
 					<Grid.Column>
 						<Grid.Row style={{marginBottom: '5px'}}><span className='bold'>Openings</span></Grid.Row>
-						{openings.map((x, i) => {
+						{openings && openings.length > 0 ? 
+						openings.map((x, i) => {
 							return <Grid.Row key={`op${i}`} style={{marginBottom: '5px'}}>{i+1}. {x}</Grid.Row>
-						})}
+						})
+						: 'None'}
 					</Grid.Column>
 					<Grid.Column>
 						<Grid.Row style={{marginBottom: '5px'}}><span className='bold'>Endings</span></Grid.Row>
-						{endings.map((x, i) => {
+						{endings && endings.length > 0 ?
+						endings.map((x, i) => {
 							return <Grid.Row key={`ed${i}`} style={{marginBottom: '5px'}}>{i+1}. {x}</Grid.Row>
-						})}
+						})
+						: 'None'}
 					</Grid.Column>
 				</Grid>
 			</Container>

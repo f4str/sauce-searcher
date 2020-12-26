@@ -11,6 +11,10 @@ import ErrorMessage from './components/ErrorMessage';
 import './App.css';
 
 const parsePattern = (query) => {
+	if (query.length <= 2) {
+		return -1;
+	}
+	
 	const first = query.charAt(0);
 	const last = query.slice(-1);
 	if (first === '{' && last === '}') {
