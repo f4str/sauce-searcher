@@ -21,7 +21,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 	const [url, setUrl] = useState('');
 	
 	const fetchData = async () => {
-		setMessage(<Loader key='loader' active inline='centered' size='large'>Loading</Loader>);
+		setMessage(<Loader key='loader' active inline='centered' size='large'>Searching</Loader>);
 		setFound(false);
 		
 		const first = query.charAt(0);

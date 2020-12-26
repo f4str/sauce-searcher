@@ -25,7 +25,7 @@ const Manga = forwardRef(({query, active}, ref) => {
 	const [serializations, setSerializations] = useState([]);
 	
 	const fetchData = async () => {
-		setMessage(<Loader key='loader' active inline='centered' size='large'>Loading</Loader>);
+		setMessage(<Loader key='loader' active inline='centered' size='large'>Searching</Loader>);
 		setFound(false);
 		
 		const first = query.charAt(0);
@@ -67,16 +67,16 @@ const Manga = forwardRef(({query, active}, ref) => {
 	
 	const textGridRow = (name, data) => {
 		if (data && data !== '') {
-			return <Grid.Row key={name} style={{marginBottom: '5px'}}><span className='bold'>{name}</span>{data}</Grid.Row>
+			return <Grid.Row key={name} style={{marginBottom: '10px'}}><span className='bold'>{name}</span>{data}</Grid.Row>
 		}
 		else {
 			return null;
 		}
-	}
+	};
 	
 	const nameConverter = (names) => {
 		return names.map(n => n.split(', ').reverse().join(" ")).join(', ');
-	}
+	};
 	
 	return (
 		<div>
@@ -96,10 +96,10 @@ const Manga = forwardRef(({query, active}, ref) => {
 							<a href={url} className='link'><Header inverted textAlign='left'>{title}</Header></a>
 						</Grid.Row>
 						{textGridRow('', titleEnglish)}
-						<Grid.Row style={{marginBottom: '5px'}}>
+						<Grid.Row style={{marginBottom: '10px'}}>
 							<span className='bold'>Type: </span>{type} | <span className='bold'>Status: </span>{status}
 						</Grid.Row>
-						<Grid.Row style={{marginBottom: '5px'}}>
+						<Grid.Row style={{marginBottom: '10px'}}>
 							<span className='bold'>Volumes: </span>{volumes} | <span className='bold'>Chapters: </span>{chapters}
 						</Grid.Row>
 						{textGridRow('Rating: ', rating)}
