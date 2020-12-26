@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { Container, Grid, Image, Header } from 'semantic-ui-react';
+import { Container, Grid, Image, Header, Loader } from 'semantic-ui-react';
 
 const api = process.env.REACT_APP_API_SERVER;
 
@@ -28,7 +28,7 @@ const Anime = forwardRef(({query, active}, ref) => {
 	const [endings, setEndings] = useState([]);
 	
 	const fetchData = async () => {
-		setMessage('');
+		setMessage(<Loader key='loader' active inline='centered' size='large'>Loading</Loader>);
 		setFound(false);
 		
 		const first = query.charAt(0);
@@ -61,7 +61,7 @@ const Anime = forwardRef(({query, active}, ref) => {
 		}
 		else {
 			setFound(false);
-			setMessage('anime not found');
+			setMessage('Anime not found');
 		}
 	};
 	
@@ -73,7 +73,7 @@ const Anime = forwardRef(({query, active}, ref) => {
 	
 	const textGridRow = (name, data) => {
 		if (data && data !== '') {
-			return <Grid.Row style={{marginBottom: '5px'}}><span className='bold'>{name}</span>{data}</Grid.Row>
+			return <Grid.Row key={name} style={{marginBottom: '5px'}}><span className='bold'>{name}</span>{data}</Grid.Row>
 		}
 		else {
 			return null;
@@ -108,14 +108,12 @@ const Anime = forwardRef(({query, active}, ref) => {
 						{textGridRow('Duration: ', duration)}
 						{textGridRow('Season: ', premiered)}
 						{textGridRow('Aired: ', aired)}
+						{textGridRow('Genres: ', genres.join(', '))}
 					</Grid.Column>
 				</Grid>
 				<Grid columns={1} textAlign='left'>
 					<Grid.Column>
 						<span className='bold'>Synopsis:</span> {synopsis}
-					</Grid.Column>
-					<Grid.Column>
-						<span className='bold'>Genres:</span> {genres.join(', ')}
 					</Grid.Column>
 					<Grid.Column>
 						{Object.entries(relations).map(r => {
@@ -125,13 +123,13 @@ const Anime = forwardRef(({query, active}, ref) => {
 					<Grid.Column>
 						<Grid.Row style={{marginBottom: '5px'}}><span className='bold'>Openings</span></Grid.Row>
 						{openings.map((x, i) => {
-							return <Grid.Row style={{marginBottom: '5px'}}>{i+1}. {x}</Grid.Row>
+							return <Grid.Row key={`op${i}`} style={{marginBottom: '5px'}}>{i+1}. {x}</Grid.Row>
 						})}
 					</Grid.Column>
 					<Grid.Column>
 						<Grid.Row style={{marginBottom: '5px'}}><span className='bold'>Endings</span></Grid.Row>
 						{endings.map((x, i) => {
-							return <Grid.Row style={{marginBottom: '5px'}}>{i+1}. {x}</Grid.Row>
+							return <Grid.Row key={`ed${i}`} style={{marginBottom: '5px'}}>{i+1}. {x}</Grid.Row>
 						})}
 					</Grid.Column>
 				</Grid>
