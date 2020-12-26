@@ -9,7 +9,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 	
 	const [id, setId] = useState(0);
 	const [title, setTitle] = useState('');
-	const [uploadDate, setUploadDate] = useState('');
+	const [uploadDate, setUploadDate] = useState(null);
 	const [pages, setPages] = useState(0);
 	const [characters, setCharacters] = useState([]);
 	const [parodies, setParodies] = useState([]);
@@ -34,7 +34,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 			setFound(true);
 			setId(data['id']);
 			setTitle(data['title']);
-			setUploadDate(data['upload_date']);
+			setUploadDate(data['upload_date'] ? new Date(data['upload_date']) : null);
 			setPages(data['pages']);
 			setCharacters(data['characters']);
 			setParodies(data['parodies']);
@@ -64,7 +64,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 		else {
 			return null;
 		}
-	}
+	};
 	
 	return (
 		<div>
@@ -74,14 +74,14 @@ const Doujin = forwardRef(({query, active}, ref) => {
 					<a href={url} className='link'><Header inverted textAlign='left'>{id}</Header></a>
 				</Grid.Column>
 				<Grid.Column>
-					<span className='bold'>Title:</span> {title}
+					<span className='bold'>Title: </span>{title}
 				</Grid.Column>
 				<Grid.Column>
-					<span className='bold'>Pages:</span> {pages}
+					<span className='bold'>Pages: </span>{pages}
 				</Grid.Column>
 				<Grid.Column>
 					<span className='bold'>Upload Date: </span> 
-					{new Date(uploadDate).toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'})}
+					{uploadDate ? uploadDate.toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'}) : '?'}
 				</Grid.Column>
 				{arrayGridColumn('Characters: ', characters)}
 				{arrayGridColumn('Parodies: ', parodies)}
