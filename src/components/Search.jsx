@@ -57,7 +57,7 @@ function Search({index, setIndex, setQuery, handleClick}) {
 				onKeyDown={handleKeyDown}
 			/>
 		</Container>
-	)
+	);
 }
 
 export default Search;

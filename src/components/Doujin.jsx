@@ -54,12 +54,16 @@ const Doujin = forwardRef(({query, active}, ref) => {
 	useImperativeHandle(ref, () => {
 		return {
 			fetchData: fetchData
-		}
+		};
 	});
 	
 	const arrayGridColumn = (name, array) => {
 		if (array && array.length > 0) {
-			return <Grid.Column><span className='bold'>{name}</span>{array.join(', ')}</Grid.Column>
+			return (
+				<Grid.Column>
+					<span className='bold'>{name}</span>{array.join(', ')}
+				</Grid.Column>
+			);
 		}
 		else {
 			return null;
@@ -71,7 +75,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 			{ active === 'doujin' ? found ?
 			<Grid columns={1} textAlign='left'>
 				<Grid.Column>
-					<a href={url} className='link'><Header inverted textAlign='left'>{id}</Header></a>
+					<Header inverted textAlign='left'><a href={url} className='link'>{id}</a></Header>
 				</Grid.Column>
 				<Grid.Column>
 					<span className='bold'>Title: </span>{title}
@@ -93,7 +97,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 			</Grid> 
 			: message : null }
 		</div>
-	)
+	);
 });
 
 export default Doujin;

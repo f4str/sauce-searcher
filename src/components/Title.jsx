@@ -8,7 +8,7 @@ function Title({title}) {
 				{title}
 			</Header>
 		</div>
-	)
+	);
 }
 
 export default Title;
