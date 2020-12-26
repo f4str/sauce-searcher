@@ -1,13 +1,22 @@
 const vnTags = require('./vn_tags.json');
 
 
+function formatType(type) {
+	if (type === 'manga') {
+		return 'manga/light novel';
+	}
+	else {
+		return type;
+	}
+}
+
 function parseAnime(data) {
 	const genres = data['genres'].map(x => x['name']);
 	const studios = data['studios'].map(x => x['name']);
 	const related = data['related'];
 	const relations = {};
 	for (const r in related) {
-		relations[r] = related[r].map(x => `${x['name']} (${x['type']})`);
+		relations[r] = related[r].map(x => `${x['name']} (${formatType(x['type'])})`);
 	}
 	const openings = data['opening_themes'].map(x => {
 		const start = x.indexOf('"');
@@ -17,11 +26,20 @@ function parseAnime(data) {
 		const start = x.indexOf('"');
 		return x.substring(start);
 	});
+	let title_english = data['title_english'];
+	if (!title_english) {
+		if (data['title_synonyms'] && data['title_synonyms'].length > 0) {
+			title_english = data['title_synonyms'][0];
+		}
+		else {
+			title_english = data['title'];
+		}
+	}
 	
 	const anime = {
 		id: data['mal_id'],
 		title: data['title'],
-		title_english: data['title_english'],
+		title_english: title_english,
 		url: data['url'],
 		image: data['image_url'],
 		type: data['type'],
@@ -52,18 +70,27 @@ function parseManga(data) {
 	const related = data['related'];
 	const relations = {};
 	for (const r in related) {
-		relations[r] = related[r].map(x => `${x['name']} (${x['type']})`);
+		relations[r] = related[r].map(x => `${x['name']} (${formatType(x['type'])})`);
+	}
+	let title_english = data['title_english'];
+	if (!title_english) {
+		if (data['title_synonyms'] && data['title_synonyms'].length > 0) {
+			title_english = data['title_synonyms'][0];
+		}
+		else {
+			title_english = data['title'];
+		}
 	}
 	
 	const manga = {
 		id: data['mal_id'],
 		title: data['title'],
-		title_english: data['title_english'],
+		title_english: title_english,
 		url: data['url'],
 		image: data['image_url'],
 		type: data['type'],
-		volumes: data['volumes'] ? data['volumes'] : 'N/A',
-		chapters: data['chapters'] ? data['chapters'] : 'N/A',
+		volumes: data['volumes'],
+		chapters: data['chapters'],
 		status: data['status'],
 		publishing: data['publishing'],
 		published: data['published'],
