@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Header, Loader } from 'semantic-ui-react';
 
 const api = process.env.REACT_APP_API_SERVER;
 
@@ -21,7 +21,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 	const [url, setUrl] = useState('');
 	
 	const fetchData = async () => {
-		setMessage('');
+		setMessage(<Loader key='loader' active inline='centered' size='large'>Loading</Loader>);
 		setFound(false);
 		
 		const first = query.charAt(0);
@@ -47,7 +47,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 		}
 		else {
 			setFound(false);
-			setMessage('doujin not found');
+			setMessage('Doujin not found');
 		}
 	};
 	
@@ -71,7 +71,7 @@ const Doujin = forwardRef(({query, active}, ref) => {
 			{ active === 'doujin' ? found ?
 			<Grid columns={1} textAlign='left'>
 				<Grid.Column>
-					<a className='bold link' href={url}>{id}</a>
+					<a href={url} className='link'><Header inverted textAlign='left'>{id}</Header></a>
 				</Grid.Column>
 				<Grid.Column>
 					<span className='bold'>Title:</span> {title}

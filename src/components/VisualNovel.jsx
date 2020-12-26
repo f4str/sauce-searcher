@@ -9,7 +9,7 @@ const VisualNovel = forwardRef(({query, active}, ref) => {
 	const [result, setResult] = useState(null);
 	
 	const fetchData = async () => {
-		setMessage('');
+		setMessage('Loading...');
 		setFound(false);
 		
 		const first = query.charAt(0);
@@ -24,7 +24,7 @@ const VisualNovel = forwardRef(({query, active}, ref) => {
 		}
 		else {
 			setFound(false);
-			setMessage('visual novel not found');
+			setMessage('Visual novel not found');
 		}
 	};
 	

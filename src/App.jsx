@@ -74,7 +74,7 @@ function App() {
 				break;
 			default:
 				setActive('error');
-				setMessage('invalid search pattern');
+				setMessage('Invalid search pattern');
 				break;
 		}
 	};
@@ -83,7 +83,7 @@ function App() {
 		<div className="App">
 			<Title title="Sauce Searcher" />
 			<Search index={index} setIndex={setIndex} setQuery={setQuery} handleClick={handleClick} />
-			<Container style={{ margin: '30px', padding: '30px', border: '2px solid white', lineHeight: 'normal' }}>
+			<Container style={{ margin: '30px', padding: '30px', border: active ? '2px solid white' : null, lineHeight: 'normal' }}>
 				<Anime ref={animeRef} query={query} active={active} />
 				<Manga ref={mangaRef} query={query} active={active} />
 				<LightNovel ref={LightNovelRef} query={query} active={active} />
