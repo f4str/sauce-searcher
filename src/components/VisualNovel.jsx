@@ -6,6 +6,7 @@ const api = process.env.REACT_APP_API_SERVER;
 const VisualNovel = forwardRef(({query, active}, ref) => {
 	const [found, setFound] = useState(false);
 	const [message, setMessage] = useState('');
+	const [blurred, setBlurred] = useState(true);
 	
 	const [title, setTitle] = useState('');
 	const [url, setUrl] = useState('');
@@ -18,7 +19,6 @@ const VisualNovel = forwardRef(({query, active}, ref) => {
 	const [anime, setAnime] = useState(false);
 	const [length, setLength] = useState('');
 	const [score, setScore] = useState(0);
-	const [blurred, setBlurred] = useState(true);
 	
 	const fetchData = async () => {
 		setMessage(<Loader key='loader' active inline='centered' size='large'>Searching</Loader>);
@@ -54,12 +54,16 @@ const VisualNovel = forwardRef(({query, active}, ref) => {
 	useImperativeHandle(ref, () => {
 		return {
 			fetchData: fetchData
-		}
+		};
 	});
 	
 	const textGridRow = (name, data) => {
 		if (data && data !== '') {
-			return <Grid.Row key={name} style={{marginBottom: '10px'}}><span className='bold'>{name}</span>{data}</Grid.Row>
+			return (
+				<Grid.Row key={name} style={{marginBottom: '10px'}}>
+					<span className='bold'>{name}</span>{data}
+				</Grid.Row>
+			);
 		}
 		else {
 			return null;
@@ -103,7 +107,7 @@ const VisualNovel = forwardRef(({query, active}, ref) => {
 					</Grid.Column>
 					<Grid.Column largeScreen={10} tablet={9} mobile={9}>
 						<Grid.Row style={{marginBottom: '10px'}}>
-							<a href={url} className='link'><Header inverted textAlign='left'>{title}</Header></a>
+							<Header inverted textAlign='left'><a href={url} className='link'>{title}</a></Header>
 						</Grid.Row>
 						{textGridRow('Type: ', 'Visual Novel')}
 						{textGridRow('Released: ', released ? released.toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'}) : '?')}
@@ -123,7 +127,7 @@ const VisualNovel = forwardRef(({query, active}, ref) => {
 			</Container>
 			: message : null }
 		</div>
-	)
+	);
 });
 
 export default VisualNovel;

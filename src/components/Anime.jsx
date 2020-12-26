@@ -68,12 +68,16 @@ const Anime = forwardRef(({query, active}, ref) => {
 	useImperativeHandle(ref, () => {
 		return {
 			fetchData: fetchData
-		}
+		};
 	});
 	
 	const textGridRow = (name, data) => {
 		if (data && data !== '') {
-			return <Grid.Row key={name} style={{marginBottom: '10px'}}><span className='bold'>{name}</span>{data}</Grid.Row>
+			return (
+				<Grid.Row key={name} style={{marginBottom: '10px'}}>
+					<span className='bold'>{name}</span>{data}
+				</Grid.Row>
+			);
 		}
 		else {
 			return null;
@@ -95,7 +99,7 @@ const Anime = forwardRef(({query, active}, ref) => {
 					</Grid.Column>
 					<Grid.Column largeScreen={10} tablet={9} mobile={9}>
 						<Grid.Row style={{marginBottom: '10px'}}>
-							<a href={url} className='link'><Header inverted textAlign='left'>{title}</Header></a>
+							<Header inverted textAlign='left'><a href={url} className='link'>{title}</a></Header>
 						</Grid.Row>
 						{textGridRow('English Title: ', titleEnglish)}
 						<Grid.Row style={{marginBottom: '10px'}}>
@@ -140,7 +144,7 @@ const Anime = forwardRef(({query, active}, ref) => {
 			</Container>
 			: message : null }
 		</div>
-	)
+	);
 });
 
 export default Anime;

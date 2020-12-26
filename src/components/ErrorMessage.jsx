@@ -5,7 +5,7 @@ function ErrorMessage({active, message}) {
 		<div>
 			{ active === 'error' ? message : null }
 		</div>
-	)
+	);
 }
 
 export default ErrorMessage;
