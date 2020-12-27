@@ -39,7 +39,7 @@ Start the server
 $ npm start
 ```
 
-The server will start on port http://localhost5000 if a specific port has not been specified. 
+The server will start on port http://localhost:4000 if a specific port has not been specified. 
 
 ## Making API calls
 

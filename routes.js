@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const VNDB = require('vndb-api');
-
 const parser = require('./parser');
-
 
 router.get('/', (req, res) => {
 	res.send('server is running');
@@ -40,7 +38,7 @@ router.get('/manga/:query(*)', async (req, res) => {
 		const query = response.data;
 		const results = query['results'];
 		if (results && results.length > 0) {
-			const result = results.find(x => x['type'] == 'Manga');
+			const result = results.find(x => x['type'] === 'Manga');
 			if (result) {
 				const id = result['mal_id'];
 				const url = `https://api.jikan.moe/v3/manga/${id}`;
@@ -69,12 +67,12 @@ router.get('/ln/:query(*)', async (req, res) => {
 		const query = response.data;
 		const results = query['results'];
 		if (results && results.length > 0) {
-			const result = results.find(x => x['type'] == 'Light Novel');
+			const result = results.find(x => x['type'] === 'Light Novel');
 			if (result) {
 				const id = result['mal_id'];
 				const url = `https://api.jikan.moe/v3/manga/${id}`;
 				const response = await axios.get(url);
-				const ln = parser.parseManga(response.data);
+				const ln = parser.parseLightNovel(response.data);
 				res.status(200).send(ln);
 			}
 			else {

@@ -1,6 +1,6 @@
 {
   "name": "sauce-searcher-server",
-  "homepage": "https://github.com/f4str/sauce-searcher-server",
+  "homepage": ".",
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
