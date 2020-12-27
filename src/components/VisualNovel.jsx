@@ -43,7 +43,7 @@ const VisualNovel = forwardRef(({query, active}, ref) => {
 			setStaff(data['staff']);
 			setAnime(data['anime']);
 			setLength(data['length']);
-			setScore(data['rating']);
+			setScore(data['score']);
 		}
 		else {
 			setFound(false);
