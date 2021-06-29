@@ -10,8 +10,8 @@ const api = process.env.REACT_APP_API_SERVER;
 
 const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
   const [found, setFound] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | JSX.Element>('');
-  
+  const [message, setMessage] = useState<string | React.ReactElement>('');
+
   const [id, setId] = useState<number>(0);
   const [title, setTitle] = useState<string>('');
   const [uploadDate, setUploadDate] = useState<string>('');
@@ -24,91 +24,106 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
   const [languages, setLanguages] = useState([]);
   const [categories, setCategories] = useState([]);
   const [url, setUrl] = useState('');
-  
+
   const fetchData = async () => {
-    const loader = <Loader key='loader' active inline='centered' size='large'>Searching</Loader>;
+    const loader = (
+      <Loader key="loader" active inline="centered" size="large">
+        Searching
+      </Loader>
+    );
     setMessage(loader);
     setFound(false);
-    
+
     const first = query.charAt(0);
     const last = query.slice(-1);
     const search = first === '(' && last === ')' ? query.slice(1, -1) : query;
-    
+
     const response = await fetch(`${api}/doujin/${search}`);
     if (response.status === 200) {
       const data = await response.json();
       setFound(true);
-      setId(data['id']);
-      setTitle(data['title']);
-      setPages(data['pages']);
-      setCharacters(data['characters']);
-      setParodies(data['parodies']);
-      setTags(data['tags']);
-      setArtists(data['artists']);
-      setGroups(data['groups']);
-      setLanguages(data['languages']);
-      setCategories(data['categories']);
-      setUrl(data['url']);
-      const upload = data['upload_date'] ? new Date(data['upload_date']) : null;
+      setId(data.id);
+      setTitle(data.title);
+      setPages(data.pages);
+      setCharacters(data.characters);
+      setParodies(data.parodies);
+      setTags(data.tags);
+      setArtists(data.artists);
+      setGroups(data.groups);
+      setLanguages(data.languages);
+      setCategories(data.categories);
+      setUrl(data.url);
+      const upload = data.upload_date ? new Date(data.upload_date) : null;
       if (upload) {
-        setUploadDate(upload.toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric'}));
+        setUploadDate(
+          upload.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+        );
+      } else {
+        setUploadDate('?');
       }
-      else {
-        setUploadDate('?')
-      }
-    }
-    else {
+    } else {
       setFound(false);
       setMessage('Doujin not found');
     }
   };
-  
+
   useImperativeHandle(ref, () => {
     return {
-      fetchData: fetchData
+      fetchData,
     };
   });
-  
+
   const arrayGridColumn = (name: string, array: string[]) => {
     if (array && array.length > 0) {
       return (
         <Grid.Column>
-          <span className='bold'>{name}</span>{array.join(', ')}
+          <span className="bold">{name}</span>
+          {array.join(', ')}
         </Grid.Column>
       );
     }
-    else {
-      return null;
-    }
+
+    return null;
   };
-  
-  return (
-    <div>
-      { active === 'doujin' ? found ?
-      <Grid columns={1} textAlign='left'>
-        <Grid.Column>
-          <Header inverted textAlign='left'><a href={url} className='link'>{id}</a></Header>
-        </Grid.Column>
-        <Grid.Column>
-          <span className='bold'>Title: </span>{title}
-        </Grid.Column>
-        <Grid.Column>
-          <span className='bold'>Pages: </span>{pages}
-        </Grid.Column>
-        <Grid.Column>
-          <span className='bold'>Upload Date: </span>{uploadDate}
-        </Grid.Column>
-        {arrayGridColumn('Characters: ', characters)}
-        {arrayGridColumn('Parodies: ', parodies)}
-        {arrayGridColumn('Tags: ', tags)}
-        {arrayGridColumn('Artists: ', artists)}
-        {arrayGridColumn('Groups: ', groups)}
-        {arrayGridColumn('Languages: ', languages)}
-        {arrayGridColumn('Categories: ', categories)}
-      </Grid> 
-      : message : null }
-    </div>
-  );
+
+  if (active === 'doujin') {
+    if (found) {
+      return (
+        <Grid columns={1} textAlign="left">
+          <Grid.Column>
+            <Header inverted textAlign="left">
+              <a href={url} className="link">
+                {id}
+              </a>
+            </Header>
+          </Grid.Column>
+          <Grid.Column>
+            <span className="bold">Title: </span>
+            {title}
+          </Grid.Column>
+          <Grid.Column>
+            <span className="bold">Pages: </span>
+            {pages}
+          </Grid.Column>
+          <Grid.Column>
+            <span className="bold">Upload Date: </span>
+            {uploadDate}
+          </Grid.Column>
+          {arrayGridColumn('Characters: ', characters)}
+          {arrayGridColumn('Parodies: ', parodies)}
+          {arrayGridColumn('Tags: ', tags)}
+          {arrayGridColumn('Artists: ', artists)}
+          {arrayGridColumn('Groups: ', groups)}
+          {arrayGridColumn('Languages: ', languages)}
+          {arrayGridColumn('Categories: ', categories)}
+        </Grid>
+      );
+    }
+
+    return <div>{message}</div>;
+  }
+
+  return <div />;
 });
 
 export default Doujin;
