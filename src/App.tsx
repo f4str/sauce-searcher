@@ -18,41 +18,40 @@ const parsePattern = (query: string) => {
   if (query.length <= 2) {
     return -1;
   }
-  
+
   const first = query.charAt(0);
   const last = query.slice(-1);
   if (first === '{' && last === '}') {
     return 1;
   }
-  else if (first === '<' && last === '>') {
+  if (first === '<' && last === '>') {
     return 2;
   }
-  else if (first === '[' && last === ']') {
+  if (first === '[' && last === ']') {
     return 3;
   }
-  else if (first === '|' && last === '|') {
+  if (first === '|' && last === '|') {
     return 4;
   }
-  else if (first === '(' && last === ')') {
+  if (first === '(' && last === ')') {
     return 5;
   }
-  else {
-    return -1;
-  }
+
+  return -1;
 };
 
-function App() {
+function App(): React.ReactElement {
   const [index, setIndex] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [active, setActive] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('');
-  
+
   const animeRef = useRef<fetchDataRef>(null);
   const mangaRef = useRef<fetchDataRef>(null);
   const lightNovelRef = useRef<fetchDataRef>(null);
   const visualNovelRef = useRef<fetchDataRef>(null);
   const doujinRef = useRef<fetchDataRef>(null);
-  
+
   const handleClick = () => {
     if (!query || !/\S/.test(query)) {
       setActive(null);
@@ -96,12 +95,19 @@ function App() {
         break;
     }
   };
-  
+
   return (
     <div className="App">
       <Title title="Sauce Searcher" />
       <Search index={index} setIndex={setIndex} setQuery={setQuery} handleClick={handleClick} />
-      <Container style={{ margin: '30px', padding: '30px', border: active ? '2px solid white' : 'none', lineHeight: 'normal' }}>
+      <Container
+        style={{
+          margin: '30px',
+          padding: '30px',
+          border: active ? '2px solid white' : 'none',
+          lineHeight: 'normal',
+        }}
+      >
         <Anime ref={animeRef} query={query} active={active} />
         <Manga ref={mangaRef} query={query} active={active} />
         <LightNovel ref={lightNovelRef} query={query} active={active} />
