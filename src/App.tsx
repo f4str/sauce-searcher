@@ -40,7 +40,7 @@ const parsePattern = (query: string) => {
   return -1;
 };
 
-function App() {
+function App(): React.ReactElement {
   const [index, setIndex] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
   const [active, setActive] = useState<string | null>(null);

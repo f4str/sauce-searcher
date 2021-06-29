@@ -10,7 +10,7 @@ const api = process.env.REACT_APP_API_SERVER;
 
 const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
   const [found, setFound] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | JSX.Element>('');
+  const [message, setMessage] = useState<string | React.ReactElement>('');
 
   const [id, setId] = useState<number>(0);
   const [title, setTitle] = useState<string>('');

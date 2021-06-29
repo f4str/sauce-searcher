@@ -14,7 +14,7 @@ const api = process.env.REACT_APP_API_SERVER;
 
 const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
   const [found, setFound] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | JSX.Element>('');
+  const [message, setMessage] = useState<string | React.ReactElement>('');
 
   const [title, setTitle] = useState<string>('');
   const [titleEnglish, setTitleEnglish] = useState<string>('');

@@ -5,8 +5,8 @@ interface ErrorMessageProps {
   message: string;
 }
 
-function ErrorMessage({ active, message }: ErrorMessageProps) {
+const ErrorMessage = ({ active, message }: ErrorMessageProps): React.ReactElement => {
   return <div>{active === 'error' ? message : null}</div>;
-}
+};
 
 export default ErrorMessage;

@@ -14,7 +14,7 @@ const api = process.env.REACT_APP_API_SERVER;
 
 const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
   const [found, setFound] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | JSX.Element>('');
+  const [message, setMessage] = useState<string | React.ReactElement>('');
 
   const [title, setTitle] = useState<string>('');
   const [titleEnglish, setTitleEnglish] = useState<string>('');

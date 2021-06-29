@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Input, Segment, Tab, TabProps } from 'semantic-ui-react';
 
-interface Props {
+interface SearchProps {
   index: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
@@ -22,7 +22,7 @@ const panes: Pane[] = [
   { menuItem: 'Doujin', placeholder: 'Search by doujin digits' },
 ];
 
-function Search({ index, setIndex, setQuery, handleClick }: Props) {
+const Search = ({ index, setIndex, setQuery, handleClick }: SearchProps): React.ReactElement => {
   const [placeholder, setPlaceholder] = useState<string>('Search');
 
   useEffect(() => {
@@ -73,6 +73,6 @@ function Search({ index, setIndex, setQuery, handleClick }: Props) {
       />
     </Container>
   );
-}
+};
 
 export default Search;

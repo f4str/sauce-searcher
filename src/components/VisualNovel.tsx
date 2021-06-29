@@ -10,7 +10,7 @@ const api = process.env.REACT_APP_API_SERVER;
 
 const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
   const [found, setFound] = useState<boolean>(false);
-  const [message, setMessage] = useState<string | JSX.Element>('');
+  const [message, setMessage] = useState<string | React.ReactElement>('');
   const [blurred, setBlurred] = useState<boolean>(true);
 
   const [title, setTitle] = useState<string>('');
