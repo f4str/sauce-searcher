@@ -1,11 +1,11 @@
 import React from 'react';
 import { Header, Icon, Menu } from 'semantic-ui-react';
 
-interface Props {
+interface TitleProps {
   title: string;
 }
 
-function Title({ title }: Props) {
+const Title = ({ title }: TitleProps): React.ReactElement => {
   return (
     <div>
       <Header size="huge" inverted style={{ margin: '30px' }}>
@@ -20,6 +20,6 @@ function Title({ title }: Props) {
       </Header>
     </div>
   );
-}
+};
 
 export default Title;
