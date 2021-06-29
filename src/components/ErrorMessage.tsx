@@ -6,11 +6,7 @@ interface ErrorMessageProps {
 }
 
 function ErrorMessage({ active, message }: ErrorMessageProps) {
-  return (
-    <div>
-      { active === 'error' ? message : null }
-    </div>
-  );
+  return <div>{active === 'error' ? message : null}</div>;
 }
 
 export default ErrorMessage;
