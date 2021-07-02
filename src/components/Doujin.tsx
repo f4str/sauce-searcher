@@ -27,7 +27,7 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
 
   const fetchData = async () => {
     const loader = (
-      <Loader key="loader" active inline="centered" size="large">
+      <Loader key='loader' active inline='centered' size='large'>
         Searching
       </Loader>
     );
@@ -77,7 +77,7 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
     if (array && array.length > 0) {
       return (
         <Grid.Column>
-          <span className="bold">{name}</span>
+          <span className='bold'>{name}</span>
           {array.join(', ')}
         </Grid.Column>
       );
@@ -89,24 +89,24 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
   if (active === 'doujin') {
     if (found) {
       return (
-        <Grid columns={1} textAlign="left">
+        <Grid columns={1} textAlign='left'>
           <Grid.Column>
-            <Header inverted textAlign="left">
-              <a href={url} className="link">
+            <Header inverted textAlign='left'>
+              <a href={url} className='link'>
                 {id}
               </a>
             </Header>
           </Grid.Column>
           <Grid.Column>
-            <span className="bold">Title: </span>
+            <span className='bold'>Title: </span>
             {title}
           </Grid.Column>
           <Grid.Column>
-            <span className="bold">Pages: </span>
+            <span className='bold'>Pages: </span>
             {pages}
           </Grid.Column>
           <Grid.Column>
-            <span className="bold">Upload Date: </span>
+            <span className='bold'>Upload Date: </span>
             {uploadDate}
           </Grid.Column>
           {arrayGridColumn('Characters: ', characters)}
