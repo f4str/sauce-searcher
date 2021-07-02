@@ -65,7 +65,7 @@ const Search = ({ index, setIndex, setQuery, handleClick }: SearchProps): React.
           },
         }}
         style={{ width: '100%' }}
-        size="small"
+        size='small'
         placeholder={placeholder}
         inverted
         onChange={handleInputChange}

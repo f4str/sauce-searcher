@@ -97,8 +97,8 @@ function App(): React.ReactElement {
   };
 
   return (
-    <div className="App">
-      <Title title="Sauce Searcher" />
+    <div className='App'>
+      <Title title='Sauce Searcher' />
       <Search index={index} setIndex={setIndex} setQuery={setQuery} handleClick={handleClick} />
       <Container
         style={{
