@@ -8,14 +8,14 @@ interface TitleProps {
 const Title = ({ title }: TitleProps): React.ReactElement => {
   return (
     <div>
-      <Header size="huge" inverted style={{ margin: '30px' }}>
+      <Header size='huge' inverted style={{ margin: '30px' }}>
         {title}
         <Menu.Item
-          href="https://github.com/f4str/sauce-searcher"
-          target="_blank"
+          href='https://github.com/f4str/sauce-searcher'
+          target='_blank'
           style={{ marginLeft: '10px' }}
         >
-          <Icon name="github" inverted />
+          <Icon name='github' inverted />
         </Menu.Item>
       </Header>
     </div>

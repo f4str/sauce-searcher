@@ -27,7 +27,7 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
 
   const fetchData = async () => {
     const loader = (
-      <Loader key="loader" active inline="centered" size="large">
+      <Loader key='loader' active inline='centered' size='large'>
         Searching
       </Loader>
     );
@@ -81,7 +81,7 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
     if (data && data !== '') {
       return (
         <Grid.Row key={name} style={{ marginBottom: '10px' }}>
-          <span className="bold">{name}</span>
+          <span className='bold'>{name}</span>
           {data}
         </Grid.Row>
       );
@@ -93,8 +93,8 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
   if (active === 'visual novel') {
     if (found) {
       return (
-        <Container className="smaller-font">
-          <Grid columns={2} textAlign="left">
+        <Container className='smaller-font'>
+          <Grid columns={2} textAlign='left'>
             <Grid.Column largeScreen={4} tablet={6} mobile={6}>
               {!imageNSFW ? (
                 <Image
@@ -110,7 +110,7 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
               ) : (
                 <Dimmer.Dimmable as={Image} fluid blurring dimmed={blurred}>
                   <Dimmer active={blurred}>
-                    <Header as="h2" inverted>
+                    <Header as='h2' inverted>
                       NSFW
                     </Header>
                     <Button
@@ -137,8 +137,8 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
             </Grid.Column>
             <Grid.Column largeScreen={10} tablet={9} mobile={9}>
               <Grid.Row style={{ marginBottom: '10px' }}>
-                <Header inverted textAlign="left">
-                  <a href={url} className="link">
+                <Header inverted textAlign='left'>
+                  <a href={url} className='link'>
                     {title}
                   </a>
                 </Header>
@@ -151,10 +151,10 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
               {textGridRow('Tags: ', tags.slice(0, 20).join(', '))}
             </Grid.Column>
           </Grid>
-          <Grid columns={1} textAlign="left">
+          <Grid columns={1} textAlign='left'>
             {description ? (
               <Grid.Column>
-                <span className="bold">Description:</span> {description}
+                <span className='bold'>Description:</span> {description}
               </Grid.Column>
             ) : null}
           </Grid>
