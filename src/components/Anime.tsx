@@ -38,7 +38,7 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
 
   const fetchData = async () => {
     const loader = (
-      <Loader key="loader" active inline="centered" size="large">
+      <Loader key='loader' active inline='centered' size='large'>
         Searching
       </Loader>
     );
@@ -88,7 +88,7 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
     if (data && data !== '') {
       return (
         <Grid.Row key={name} style={{ marginBottom: '10px' }}>
-          <span className="bold">{name}</span>
+          <span className='bold'>{name}</span>
           {data}
         </Grid.Row>
       );
@@ -100,8 +100,8 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
   if (active === 'anime') {
     if (found)
       return (
-        <Container className="smaller-font">
-          <Grid columns={2} textAlign="left">
+        <Container className='smaller-font'>
+          <Grid columns={2} textAlign='left'>
             <Grid.Column largeScreen={4} tablet={6} mobile={6}>
               <Image
                 src={imageUrl}
@@ -116,16 +116,16 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
             </Grid.Column>
             <Grid.Column largeScreen={10} tablet={9} mobile={9}>
               <Grid.Row style={{ marginBottom: '10px' }}>
-                <Header inverted textAlign="left">
-                  <a href={url} className="link">
+                <Header inverted textAlign='left'>
+                  <a href={url} className='link'>
                     {title}
                   </a>
                 </Header>
               </Grid.Row>
               {textGridRow('English Title: ', titleEnglish)}
               <Grid.Row style={{ marginBottom: '10px' }}>
-                <span className="bold">Type: </span>
-                {type} | <span className="bold">Episodes: </span>
+                <span className='bold'>Type: </span>
+                {type} | <span className='bold'>Episodes: </span>
                 {episodes}
               </Grid.Row>
               {textGridRow('Status: ', status)}
@@ -138,9 +138,9 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
               {textGridRow('Genres: ', genres.join(', '))}
             </Grid.Column>
           </Grid>
-          <Grid columns={1} textAlign="left">
+          <Grid columns={1} textAlign='left'>
             <Grid.Column>
-              <span className="bold">Synopsis:</span> {synopsis}
+              <span className='bold'>Synopsis:</span> {synopsis}
             </Grid.Column>
             <Grid.Column>
               {Object.entries(relations).map((r) => {
@@ -149,7 +149,7 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
             </Grid.Column>
             <Grid.Column>
               <Grid.Row style={{ marginBottom: '5px' }}>
-                <span className="bold">Openings</span>
+                <span className='bold'>Openings</span>
               </Grid.Row>
               {openings && openings.length > 0
                 ? openings.map((x, i) => {
@@ -163,7 +163,7 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
             </Grid.Column>
             <Grid.Column>
               <Grid.Row style={{ marginBottom: '5px' }}>
-                <span className="bold">Endings</span>
+                <span className='bold'>Endings</span>
               </Grid.Row>
               {endings && endings.length > 0
                 ? endings.map((x, i) => {

@@ -35,7 +35,7 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
 
   const fetchData = async () => {
     const loader = (
-      <Loader key="loader" active inline="centered" size="large">
+      <Loader key='loader' active inline='centered' size='large'>
         Searching
       </Loader>
     );
@@ -82,7 +82,7 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
     if (data && data !== '') {
       return (
         <Grid.Row key={name} style={{ marginBottom: '10px' }}>
-          <span className="bold">{name}</span>
+          <span className='bold'>{name}</span>
           {data}
         </Grid.Row>
       );
@@ -98,8 +98,8 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
   if (active === 'manga') {
     if (found)
       return (
-        <Container className="smaller-font">
-          <Grid columns={2} textAlign="left">
+        <Container className='smaller-font'>
+          <Grid columns={2} textAlign='left'>
             <Grid.Column largeScreen={4} tablet={6} mobile={6}>
               <Image
                 src={imageUrl}
@@ -114,21 +114,21 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
             </Grid.Column>
             <Grid.Column largeScreen={10} tablet={9} mobile={9}>
               <Grid.Row style={{ marginBottom: '10px' }}>
-                <Header inverted textAlign="left">
-                  <a href={url} className="link">
+                <Header inverted textAlign='left'>
+                  <a href={url} className='link'>
                     {title}
                   </a>
                 </Header>
               </Grid.Row>
               {textGridRow('English Title: ', titleEnglish)}
               <Grid.Row style={{ marginBottom: '10px' }}>
-                <span className="bold">Type: </span>
-                {type} | <span className="bold">Status: </span>
+                <span className='bold'>Type: </span>
+                {type} | <span className='bold'>Status: </span>
                 {status}
               </Grid.Row>
               <Grid.Row style={{ marginBottom: '10px' }}>
-                <span className="bold">Volumes: </span>
-                {volumes} | <span className="bold">Chapters: </span>
+                <span className='bold'>Volumes: </span>
+                {volumes} | <span className='bold'>Chapters: </span>
                 {chapters}
               </Grid.Row>
               {textGridRow('Rating: ', rating)}
@@ -138,9 +138,9 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
               {textGridRow('Genres: ', genres.join(', '))}
             </Grid.Column>
           </Grid>
-          <Grid columns={1} textAlign="left">
+          <Grid columns={1} textAlign='left'>
             <Grid.Column>
-              <span className="bold">Synopsis:</span> {synopsis}
+              <span className='bold'>Synopsis:</span> {synopsis}
             </Grid.Column>
             <Grid.Column>
               {Object.entries(relations).map((r) => {
