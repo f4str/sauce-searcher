@@ -5,7 +5,7 @@ const VNDB = require('vndb-api');
 const parser = require('./parser');
 
 router.get('/', (req, res) => {
-	res.send('server is running');
+	res.status(200).send('server is running');
 });
 
 router.get('/anime/:query(*)', async (req, res) => {
