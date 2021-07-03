@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Container } from 'semantic-ui-react';
-import Title from './components/Title';
+import { Container, Header } from 'semantic-ui-react';
+import Status from './components/Status';
 import Search from './components/Search';
 import Anime from './components/Anime';
 import Manga from './components/Manga';
@@ -98,7 +98,10 @@ function App(): React.ReactElement {
 
   return (
     <div className='App'>
-      <Title title='Sauce Searcher' />
+      <Status />
+      <Header size='huge' inverted style={{ marginTop: '30px', marginBottom: '20px' }}>
+        Sauce Searcher
+      </Header>
       <Search index={index} setIndex={setIndex} setQuery={setQuery} handleClick={handleClick} />
       <Container
         style={{
