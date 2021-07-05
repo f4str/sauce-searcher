@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Input, Segment, Tab, TabProps } from 'semantic-ui-react';
 import Anime from './Anime';
 import Manga from './Manga';
@@ -11,36 +11,6 @@ interface Pane {
   menuItem: string;
   placeholder: string;
 }
-
-interface fetchDataRef {
-  fetchData: () => Promise<void>;
-}
-
-const parsePattern = (query: string) => {
-  if (query.length <= 2) {
-    return -1;
-  }
-
-  const first = query.charAt(0);
-  const last = query.slice(-1);
-  if (first === '{' && last === '}') {
-    return 1;
-  }
-  if (first === '<' && last === '>') {
-    return 2;
-  }
-  if (first === '[' && last === ']') {
-    return 3;
-  }
-  if (first === '|' && last === '|') {
-    return 4;
-  }
-  if (first === '(' && last === ')') {
-    return 5;
-  }
-
-  return -1;
-};
 
 const panes: Pane[] = [
   { menuItem: 'Auto', placeholder: '{anime}, <manga>, [light novel], |visual novel|, (doujin)' },
@@ -55,14 +25,7 @@ const Search = (): React.ReactElement => {
   const [placeholder, setPlaceholder] = useState<string>('Search');
   const [index, setIndex] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
-  const [active, setActive] = useState<string | null>(null);
-  const [message, setMessage] = useState<string>('');
-
-  const animeRef = useRef<fetchDataRef>(null);
-  const mangaRef = useRef<fetchDataRef>(null);
-  const lightNovelRef = useRef<fetchDataRef>(null);
-  const visualNovelRef = useRef<fetchDataRef>(null);
-  const doujinRef = useRef<fetchDataRef>(null);
+  const [active, setActive] = useState<string | null | React.ReactElement>(null);
 
   useEffect(() => {
     setPlaceholder(panes[index].placeholder);
@@ -76,46 +39,81 @@ const Search = (): React.ReactElement => {
     setQuery(event.target.value);
   };
 
+  const parseIndex = (): number => {
+    if (index > 0) {
+      return index;
+    }
+    if (query.length <= 2) {
+      return -1;
+    }
+
+    const first = query.charAt(0);
+    const last = query.slice(-1);
+    if (first === '{' && last === '}') {
+      return 1;
+    }
+    if (first === '<' && last === '>') {
+      return 2;
+    }
+    if (first === '[' && last === ']') {
+      return 3;
+    }
+    if (first === '|' && last === '|') {
+      return 4;
+    }
+    if (first === '(' && last === ')') {
+      return 5;
+    }
+
+    return -1;
+  };
+
+  const parseQuery = (): string => {
+    if (query.length <= 2) {
+      return query;
+    }
+
+    const first = query.charAt(0);
+    const last = query.slice(-1);
+    if (
+      (first === '{' && last === '}') ||
+      (first === '<' && last === '>') ||
+      (first === '[' && last === ']') ||
+      (first === '|' && last === '|') ||
+      (first === '(' && last === ')')
+    ) {
+      return query.slice(1, -1);
+    }
+
+    return query;
+  };
+
   const handleClick = () => {
     if (!query || !/\S/.test(query)) {
       setActive(null);
       return;
     }
-    const currentIndex = index > 0 && index <= 5 ? index : parsePattern(query);
+    const currentIndex = parseIndex();
+    const currentQuery = parseQuery();
+
     switch (currentIndex) {
       case 1:
-        setActive('anime');
-        if (animeRef.current) {
-          animeRef.current.fetchData();
-        }
+        setActive(<Anime query={currentQuery} />);
         break;
       case 2:
-        setActive('manga');
-        if (mangaRef.current) {
-          mangaRef.current.fetchData();
-        }
+        setActive(<Manga query={currentQuery} />);
         break;
       case 3:
-        setActive('light novel');
-        if (lightNovelRef.current) {
-          lightNovelRef.current.fetchData();
-        }
+        setActive(<LightNovel query={currentQuery} />);
         break;
       case 4:
-        setActive('visual novel');
-        if (visualNovelRef.current) {
-          visualNovelRef.current.fetchData();
-        }
+        setActive(<VisualNovel query={currentQuery} />);
         break;
       case 5:
-        setActive('doujin');
-        if (doujinRef.current) {
-          doujinRef.current.fetchData();
-        }
+        setActive(<Doujin query={currentQuery} />);
         break;
       default:
-        setActive('error');
-        setMessage('Invalid search pattern');
+        setActive(<ErrorMessage message='Invalid search pattern' />);
         break;
     }
   };
@@ -164,12 +162,7 @@ const Search = (): React.ReactElement => {
           lineHeight: 'normal',
         }}
       >
-        <Anime ref={animeRef} query={query} active={active} />
-        <Manga ref={mangaRef} query={query} active={active} />
-        <LightNovel ref={lightNovelRef} query={query} active={active} />
-        <VisualNovel ref={visualNovelRef} query={query} active={active} />
-        <Doujin ref={doujinRef} query={query} active={active} />
-        <ErrorMessage active={active} message={message} />
+        {active}
       </Container>
     </div>
   );

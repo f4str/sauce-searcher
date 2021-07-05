@@ -1,12 +1,11 @@
 import React from 'react';
 
 interface ErrorMessageProps {
-  active: string | null;
   message: string;
 }
 
-const ErrorMessage = ({ active, message }: ErrorMessageProps): React.ReactElement => {
-  return <div>{active === 'error' ? message : null}</div>;
+const ErrorMessage = ({ message }: ErrorMessageProps): React.ReactElement => {
+  return <div>{message}</div>;
 };
 
 export default ErrorMessage;

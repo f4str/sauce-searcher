@@ -1,9 +1,8 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Grid, Image, Header, Loader } from 'semantic-ui-react';
 
 interface MangaProps {
   query: string;
-  active: string | null;
 }
 
 interface Relations {
@@ -12,7 +11,7 @@ interface Relations {
 
 const api = process.env.REACT_APP_API_SERVER;
 
-const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
+const Manga = ({ query }: MangaProps): React.ReactElement => {
   const [found, setFound] = useState<boolean>(false);
   const [message, setMessage] = useState<string | React.ReactElement>('');
 
@@ -33,7 +32,7 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
   const [authors, setAuthors] = useState<string[]>([]);
   const [serializations, setSerializations] = useState<string[]>([]);
 
-  const fetchData = async () => {
+  const fetchData = async (search: string) => {
     const loader = (
       <Loader key='loader' active inline='centered' size='large'>
         Searching
@@ -42,12 +41,8 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
     setMessage(loader);
     setFound(false);
 
-    const first = query.charAt(0);
-    const last = query.slice(-1);
-    const search = first === '<' && last === '>' ? query.slice(1, -1) : query;
-
     const response = await fetch(`${api}/manga/${search}`);
-    if (response.status === 200) {
+    if (response.ok) {
       const data = await response.json();
       setFound(true);
       setTitle(data.title);
@@ -72,11 +67,14 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
     }
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      fetchData,
-    };
-  });
+  useEffect(() => {
+    if (!query || !/\S/.test(query)) {
+      setFound(false);
+      setMessage('Invalid query');
+    } else {
+      fetchData(query);
+    }
+  }, [query]);
 
   const textGridRow = (name: string, data: string) => {
     if (data && data !== '') {
@@ -95,66 +93,62 @@ const Manga = forwardRef(({ query, active }: MangaProps, ref) => {
     return names.map((n) => n.split(', ').reverse().join(' ')).join(', ');
   };
 
-  if (active === 'manga') {
-    if (found)
-      return (
-        <Container className='smaller-font'>
-          <Grid columns={2} textAlign='left'>
-            <Grid.Column largeScreen={4} tablet={6} mobile={6}>
-              <Image
-                src={imageUrl}
-                fluid
-                label={{
-                  color: 'blue',
-                  content: score,
-                  icon: 'star',
-                  ribbon: true,
-                }}
-              />
-            </Grid.Column>
-            <Grid.Column largeScreen={10} tablet={9} mobile={9}>
-              <Grid.Row style={{ marginBottom: '10px' }}>
-                <Header inverted textAlign='left'>
-                  <a href={url} className='link'>
-                    {title}
-                  </a>
-                </Header>
-              </Grid.Row>
-              {textGridRow('English Title: ', titleEnglish)}
-              <Grid.Row style={{ marginBottom: '10px' }}>
-                <span className='bold'>Type: </span>
-                {type} | <span className='bold'>Status: </span>
-                {status}
-              </Grid.Row>
-              <Grid.Row style={{ marginBottom: '10px' }}>
-                <span className='bold'>Volumes: </span>
-                {volumes} | <span className='bold'>Chapters: </span>
-                {chapters}
-              </Grid.Row>
-              {textGridRow('Rating: ', rating)}
-              {textGridRow('Published: ', published)}
-              {textGridRow('Authors: ', nameConverter(authors))}
-              {textGridRow('Serializations: ', serializations.join(', '))}
-              {textGridRow('Genres: ', genres.join(', '))}
-            </Grid.Column>
-          </Grid>
-          <Grid columns={1} textAlign='left'>
-            <Grid.Column>
-              <span className='bold'>Synopsis:</span> {synopsis}
-            </Grid.Column>
-            <Grid.Column>
-              {Object.entries(relations).map((r) => {
-                return textGridRow(`${r[0]}: `, r[1].join(', '));
-              })}
-            </Grid.Column>
-          </Grid>
-        </Container>
-      );
+  if (found)
+    return (
+      <Container className='smaller-font'>
+        <Grid columns={2} textAlign='left'>
+          <Grid.Column largeScreen={4} tablet={6} mobile={6}>
+            <Image
+              src={imageUrl}
+              fluid
+              label={{
+                color: 'blue',
+                content: score,
+                icon: 'star',
+                ribbon: true,
+              }}
+            />
+          </Grid.Column>
+          <Grid.Column largeScreen={10} tablet={9} mobile={9}>
+            <Grid.Row style={{ marginBottom: '10px' }}>
+              <Header inverted textAlign='left'>
+                <a href={url} className='link'>
+                  {title}
+                </a>
+              </Header>
+            </Grid.Row>
+            {textGridRow('English Title: ', titleEnglish)}
+            <Grid.Row style={{ marginBottom: '10px' }}>
+              <span className='bold'>Type: </span>
+              {type} | <span className='bold'>Status: </span>
+              {status}
+            </Grid.Row>
+            <Grid.Row style={{ marginBottom: '10px' }}>
+              <span className='bold'>Volumes: </span>
+              {volumes} | <span className='bold'>Chapters: </span>
+              {chapters}
+            </Grid.Row>
+            {textGridRow('Rating: ', rating)}
+            {textGridRow('Published: ', published)}
+            {textGridRow('Authors: ', nameConverter(authors))}
+            {textGridRow('Serializations: ', serializations.join(', '))}
+            {textGridRow('Genres: ', genres.join(', '))}
+          </Grid.Column>
+        </Grid>
+        <Grid columns={1} textAlign='left'>
+          <Grid.Column>
+            <span className='bold'>Synopsis:</span> {synopsis}
+          </Grid.Column>
+          <Grid.Column>
+            {Object.entries(relations).map((r) => {
+              return textGridRow(`${r[0]}: `, r[1].join(', '));
+            })}
+          </Grid.Column>
+        </Grid>
+      </Container>
+    );
 
-    return <div>{message}</div>;
-  }
-
-  return <div />;
-});
+  return <div>{message}</div>;
+};
 
 export default Manga;
