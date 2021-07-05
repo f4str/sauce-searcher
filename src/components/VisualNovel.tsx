@@ -75,10 +75,10 @@ const VisualNovel = ({ query }: VisualNovelProps): React.ReactElement => {
     return (
       <Container className='query'>
         <Grid columns={2} textAlign='left'>
-          <Grid.Column computer={4} largeScreen={4} tablet={6} mobile={6}>
+          <Grid.Column computer={4} widescreen={4} largeScreen={4} tablet={6} mobile={6}>
             <BlurredImage imageUrl={imageUrl} score={score} imageNSFW={imageNSFW} />
           </Grid.Column>
-          <Grid.Column computer={12} largeScreen={12} tablet={10} mobile={10}>
+          <Grid.Column computer={12} widescreen={12} largeScreen={12} tablet={10} mobile={10}>
             <HeaderGridRow title={title} url={url} />
             <TextGridRow label='Type' text='Visual Novel' />
             <TextGridRow label='Released' text={released} />
