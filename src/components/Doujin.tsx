@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Header, Loader } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
+import SearchLoader from './SearchLoader';
+import { TextGridColumn, HeaderGridColumn } from './grids';
 
 interface DoujinProps {
   query: string;
@@ -25,12 +27,7 @@ const Doujin = ({ query }: DoujinProps): React.ReactElement => {
   const [url, setUrl] = useState('');
 
   const fetchData = async (search: string) => {
-    const loader = (
-      <Loader key='loader' active inline='centered' size='large'>
-        Searching
-      </Loader>
-    );
-    setMessage(loader);
+    setMessage(<SearchLoader />);
     setFound(false);
 
     const response = await fetch(`${api}/doujin/${search}`);
@@ -71,48 +68,20 @@ const Doujin = ({ query }: DoujinProps): React.ReactElement => {
     }
   }, [query]);
 
-  const arrayGridColumn = (name: string, array: string[]) => {
-    if (array && array.length > 0) {
-      return (
-        <Grid.Column>
-          <span className='bold'>{name}</span>
-          {array.join(', ')}
-        </Grid.Column>
-      );
-    }
-
-    return null;
-  };
-
   if (found) {
     return (
       <Grid columns={1} textAlign='left'>
-        <Grid.Column>
-          <Header inverted textAlign='left'>
-            <a href={url} className='link'>
-              {id}
-            </a>
-          </Header>
-        </Grid.Column>
-        <Grid.Column>
-          <span className='bold'>Title: </span>
-          {title}
-        </Grid.Column>
-        <Grid.Column>
-          <span className='bold'>Pages: </span>
-          {pages}
-        </Grid.Column>
-        <Grid.Column>
-          <span className='bold'>Upload Date: </span>
-          {uploadDate}
-        </Grid.Column>
-        {arrayGridColumn('Characters: ', characters)}
-        {arrayGridColumn('Parodies: ', parodies)}
-        {arrayGridColumn('Tags: ', tags)}
-        {arrayGridColumn('Artists: ', artists)}
-        {arrayGridColumn('Groups: ', groups)}
-        {arrayGridColumn('Languages: ', languages)}
-        {arrayGridColumn('Categories: ', categories)}
+        <HeaderGridColumn title={id} url={url} />
+        <TextGridColumn label='Title' text={title} />
+        <TextGridColumn label='Pages' text={pages} />
+        <TextGridColumn label='Upload Date' text={uploadDate} />
+        <TextGridColumn label='Characters' text={characters.join(', ')} />
+        <TextGridColumn label='Parodies' text={parodies.join(', ')} />
+        <TextGridColumn label='Tags' text={tags.join(', ')} />
+        <TextGridColumn label='Artists' text={artists.join(', ')} />
+        <TextGridColumn label='Groups' text={groups.join(', ')} />
+        <TextGridColumn label='Languages' text={languages.join(', ')} />
+        <TextGridColumn label='Categories' text={categories.join(', ')} />
       </Grid>
     );
   }
