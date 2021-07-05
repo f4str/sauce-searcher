@@ -1,14 +1,13 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Grid, Image, Header, Loader, Dimmer, Button } from 'semantic-ui-react';
 
 interface VisualNovelProps {
   query: string;
-  active: string | null;
 }
 
 const api = process.env.REACT_APP_API_SERVER;
 
-const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
+const VisualNovel = ({ query }: VisualNovelProps): React.ReactElement => {
   const [found, setFound] = useState<boolean>(false);
   const [message, setMessage] = useState<string | React.ReactElement>('');
   const [blurred, setBlurred] = useState<boolean>(true);
@@ -25,7 +24,7 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
   const [length, setLength] = useState<string>('');
   const [score, setScore] = useState<number | string>(0);
 
-  const fetchData = async () => {
+  const fetchData = async (search: string) => {
     const loader = (
       <Loader key='loader' active inline='centered' size='large'>
         Searching
@@ -34,12 +33,8 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
     setMessage(loader);
     setFound(false);
 
-    const first = query.charAt(0);
-    const last = query.slice(-1);
-    const search = first === '|' && last === '|' ? query.slice(1, -1) : query;
-
     const response = await fetch(`${api}/vn/${search}`);
-    if (response.status === 200) {
+    if (response.ok) {
       const data = await response.json();
       setFound(true);
       setBlurred(true);
@@ -71,11 +66,14 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
     }
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      fetchData,
-    };
-  });
+  useEffect(() => {
+    if (!query || !/\S/.test(query)) {
+      setFound(false);
+      setMessage('Invalid query');
+    } else {
+      fetchData(query);
+    }
+  }, [query]);
 
   const textGridRow = (name: string, data: string) => {
     if (data && data !== '') {
@@ -90,13 +88,36 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
     return null;
   };
 
-  if (active === 'visual novel') {
-    if (found) {
-      return (
-        <Container className='smaller-font'>
-          <Grid columns={2} textAlign='left'>
-            <Grid.Column largeScreen={4} tablet={6} mobile={6}>
-              {!imageNSFW ? (
+  if (found) {
+    return (
+      <Container className='smaller-font'>
+        <Grid columns={2} textAlign='left'>
+          <Grid.Column largeScreen={4} tablet={6} mobile={6}>
+            {!imageNSFW ? (
+              <Image
+                src={imageUrl}
+                fluid
+                label={{
+                  color: 'blue',
+                  content: score,
+                  icon: 'star',
+                  ribbon: true,
+                }}
+              />
+            ) : (
+              <Dimmer.Dimmable as={Image} fluid blurring dimmed={blurred}>
+                <Dimmer active={blurred}>
+                  <Header as='h2' inverted>
+                    NSFW
+                  </Header>
+                  <Button
+                    onClick={() => {
+                      setBlurred(false);
+                    }}
+                  >
+                    View
+                  </Button>
+                </Dimmer>
                 <Image
                   src={imageUrl}
                   fluid
@@ -106,66 +127,39 @@ const VisualNovel = forwardRef(({ query, active }: VisualNovelProps, ref) => {
                     icon: 'star',
                     ribbon: true,
                   }}
+                  onClick={() => setBlurred(true)}
                 />
-              ) : (
-                <Dimmer.Dimmable as={Image} fluid blurring dimmed={blurred}>
-                  <Dimmer active={blurred}>
-                    <Header as='h2' inverted>
-                      NSFW
-                    </Header>
-                    <Button
-                      onClick={() => {
-                        setBlurred(false);
-                      }}
-                    >
-                      View
-                    </Button>
-                  </Dimmer>
-                  <Image
-                    src={imageUrl}
-                    fluid
-                    label={{
-                      color: 'blue',
-                      content: score,
-                      icon: 'star',
-                      ribbon: true,
-                    }}
-                    onClick={() => setBlurred(true)}
-                  />
-                </Dimmer.Dimmable>
-              )}
+              </Dimmer.Dimmable>
+            )}
+          </Grid.Column>
+          <Grid.Column largeScreen={10} tablet={9} mobile={9}>
+            <Grid.Row style={{ marginBottom: '10px' }}>
+              <Header inverted textAlign='left'>
+                <a href={url} className='link'>
+                  {title}
+                </a>
+              </Header>
+            </Grid.Row>
+            {textGridRow('Type: ', 'Visual Novel')}
+            {textGridRow('Released: ', released)}
+            {textGridRow('Length: ', length)}
+            {textGridRow('Anime Adaptation: ', anime ? 'Yes' : 'No')}
+            {textGridRow('Staff: ', staff.join(', '))}
+            {textGridRow('Tags: ', tags.slice(0, 20).join(', '))}
+          </Grid.Column>
+        </Grid>
+        <Grid columns={1} textAlign='left'>
+          {description ? (
+            <Grid.Column>
+              <span className='bold'>Description:</span> {description}
             </Grid.Column>
-            <Grid.Column largeScreen={10} tablet={9} mobile={9}>
-              <Grid.Row style={{ marginBottom: '10px' }}>
-                <Header inverted textAlign='left'>
-                  <a href={url} className='link'>
-                    {title}
-                  </a>
-                </Header>
-              </Grid.Row>
-              {textGridRow('Type: ', 'Visual Novel')}
-              {textGridRow('Released: ', released)}
-              {textGridRow('Length: ', length)}
-              {textGridRow('Anime Adaptation: ', anime ? 'Yes' : 'No')}
-              {textGridRow('Staff: ', staff.join(', '))}
-              {textGridRow('Tags: ', tags.slice(0, 20).join(', '))}
-            </Grid.Column>
-          </Grid>
-          <Grid columns={1} textAlign='left'>
-            {description ? (
-              <Grid.Column>
-                <span className='bold'>Description:</span> {description}
-              </Grid.Column>
-            ) : null}
-          </Grid>
-        </Container>
-      );
-    }
-
-    return <div>{message}</div>;
+          ) : null}
+        </Grid>
+      </Container>
+    );
   }
 
-  return <div />;
-});
+  return <div>{message}</div>;
+};
 
 export default VisualNovel;

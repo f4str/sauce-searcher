@@ -1,14 +1,13 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Header, Loader } from 'semantic-ui-react';
 
 interface DoujinProps {
   query: string;
-  active: string | null;
 }
 
 const api = process.env.REACT_APP_API_SERVER;
 
-const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
+const Doujin = ({ query }: DoujinProps): React.ReactElement => {
   const [found, setFound] = useState<boolean>(false);
   const [message, setMessage] = useState<string | React.ReactElement>('');
 
@@ -25,7 +24,7 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
   const [categories, setCategories] = useState([]);
   const [url, setUrl] = useState('');
 
-  const fetchData = async () => {
+  const fetchData = async (search: string) => {
     const loader = (
       <Loader key='loader' active inline='centered' size='large'>
         Searching
@@ -34,12 +33,8 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
     setMessage(loader);
     setFound(false);
 
-    const first = query.charAt(0);
-    const last = query.slice(-1);
-    const search = first === '(' && last === ')' ? query.slice(1, -1) : query;
-
     const response = await fetch(`${api}/doujin/${search}`);
-    if (response.status === 200) {
+    if (response.ok) {
       const data = await response.json();
       setFound(true);
       setId(data.id);
@@ -67,11 +62,14 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
     }
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      fetchData,
-    };
-  });
+  useEffect(() => {
+    if (!query || !/\S/.test(query)) {
+      setFound(false);
+      setMessage('Invalid query');
+    } else {
+      fetchData(query);
+    }
+  }, [query]);
 
   const arrayGridColumn = (name: string, array: string[]) => {
     if (array && array.length > 0) {
@@ -86,44 +84,40 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
     return null;
   };
 
-  if (active === 'doujin') {
-    if (found) {
-      return (
-        <Grid columns={1} textAlign='left'>
-          <Grid.Column>
-            <Header inverted textAlign='left'>
-              <a href={url} className='link'>
-                {id}
-              </a>
-            </Header>
-          </Grid.Column>
-          <Grid.Column>
-            <span className='bold'>Title: </span>
-            {title}
-          </Grid.Column>
-          <Grid.Column>
-            <span className='bold'>Pages: </span>
-            {pages}
-          </Grid.Column>
-          <Grid.Column>
-            <span className='bold'>Upload Date: </span>
-            {uploadDate}
-          </Grid.Column>
-          {arrayGridColumn('Characters: ', characters)}
-          {arrayGridColumn('Parodies: ', parodies)}
-          {arrayGridColumn('Tags: ', tags)}
-          {arrayGridColumn('Artists: ', artists)}
-          {arrayGridColumn('Groups: ', groups)}
-          {arrayGridColumn('Languages: ', languages)}
-          {arrayGridColumn('Categories: ', categories)}
-        </Grid>
-      );
-    }
-
-    return <div>{message}</div>;
+  if (found) {
+    return (
+      <Grid columns={1} textAlign='left'>
+        <Grid.Column>
+          <Header inverted textAlign='left'>
+            <a href={url} className='link'>
+              {id}
+            </a>
+          </Header>
+        </Grid.Column>
+        <Grid.Column>
+          <span className='bold'>Title: </span>
+          {title}
+        </Grid.Column>
+        <Grid.Column>
+          <span className='bold'>Pages: </span>
+          {pages}
+        </Grid.Column>
+        <Grid.Column>
+          <span className='bold'>Upload Date: </span>
+          {uploadDate}
+        </Grid.Column>
+        {arrayGridColumn('Characters: ', characters)}
+        {arrayGridColumn('Parodies: ', parodies)}
+        {arrayGridColumn('Tags: ', tags)}
+        {arrayGridColumn('Artists: ', artists)}
+        {arrayGridColumn('Groups: ', groups)}
+        {arrayGridColumn('Languages: ', languages)}
+        {arrayGridColumn('Categories: ', categories)}
+      </Grid>
+    );
   }
 
-  return <div />;
-});
+  return <div>{message}</div>;
+};
 
 export default Doujin;
