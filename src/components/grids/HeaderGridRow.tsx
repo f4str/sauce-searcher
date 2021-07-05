@@ -9,7 +9,7 @@ interface HeaderGridRowProps {
 const HeaderGridRow = ({ title, url }: HeaderGridRowProps): React.ReactElement => {
   if (title && title !== '') {
     return (
-      <Grid.Row style={{ marginBottom: '10px' }}>
+      <Grid.Row className='grid-row'>
         <Header inverted textAlign='left'>
           <a href={url} className='link'>
             {title}

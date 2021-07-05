@@ -88,12 +88,12 @@ const Anime = ({ query }: AnimeProps): React.ReactElement => {
 
   if (found)
     return (
-      <Container className='smaller-font'>
+      <Container className='query'>
         <Grid columns={2} textAlign='left'>
-          <Grid.Column largeScreen={4} tablet={6} mobile={6}>
+          <Grid.Column computer={4} widescreen={4} largeScreen={4} tablet={6} mobile={6}>
             <BlurredImage imageUrl={imageUrl} score={score} imageNSFW={false} />
           </Grid.Column>
-          <Grid.Column largeScreen={10} tablet={9} mobile={9}>
+          <Grid.Column computer={12} widescreen={12} largeScreen={12} tablet={10} mobile={10}>
             <HeaderGridRow title={title} url={url} />
             <TextGridRow label='English Title' text={titleEnglish} />
             <TextGridRow label={['Type', 'Episodes']} text={[type, episodes]} />
@@ -116,7 +116,7 @@ const Anime = ({ query }: AnimeProps): React.ReactElement => {
       </Container>
     );
 
-  return <div>{message}</div>;
+  return <Container className='query'>{message}</Container>;
 };
 
 export default Anime;

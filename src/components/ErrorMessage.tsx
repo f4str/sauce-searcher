@@ -1,11 +1,12 @@
 import React from 'react';
+import { Container } from 'semantic-ui-react';
 
 interface ErrorMessageProps {
   message: string;
 }
 
 const ErrorMessage = ({ message }: ErrorMessageProps): React.ReactElement => {
-  return <div>{message}</div>;
+  return <Container className='query'>{message}</Container>;
 };
 
 export default ErrorMessage;

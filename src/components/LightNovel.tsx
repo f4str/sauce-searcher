@@ -27,7 +27,6 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
   const [chapters, setChapters] = useState<number | string>(0);
   const [status, setStatus] = useState<string>('');
   const [published, setPublished] = useState<string>('');
-  const [rating, setRating] = useState<string>('');
   const [score, setScore] = useState<number | string>(0);
   const [synopsis, setSynopsis] = useState<string>('');
   const [relations, setRelations] = useState<Relations>({});
@@ -51,7 +50,6 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
       setChapters(data.chapters ? data.chapters : '?');
       setStatus(data.status);
       setPublished(data.published ? data.published.string : '');
-      setRating(data.rating);
       setScore(data.score);
       setSynopsis(data.synopsis);
       setRelations(data.relations);
@@ -78,17 +76,16 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
 
   if (found)
     return (
-      <Container className='smaller-font'>
+      <Container className='query'>
         <Grid columns={2} textAlign='left'>
-          <Grid.Column largeScreen={4} tablet={6} mobile={6}>
+          <Grid.Column computer={4} widescreen={4} largeScreen={4} tablet={6} mobile={6}>
             <BlurredImage imageUrl={imageUrl} score={score} imageNSFW={false} />
           </Grid.Column>
-          <Grid.Column largeScreen={10} tablet={9} mobile={9}>
+          <Grid.Column computer={12} widescreen={12} largeScreen={12} tablet={10} mobile={10}>
             <HeaderGridRow title={title} url={url} />
             <TextGridRow label='English Title' text={titleEnglish} />
             <TextGridRow label={['Type', 'Status']} text={[type, status]} />
             <TextGridRow label={['Volumes', 'Chapters']} text={[volumes, chapters]} />
-            <TextGridRow label='Rating' text={rating} />
             <TextGridRow label='Published' text={published} />
             <TextGridRow label='Authors' text={nameConverter(authors)} />
             <TextGridRow label='Genres' text={genres.join(', ')} />
@@ -101,7 +98,7 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
       </Container>
     );
 
-  return <div>{message}</div>;
+  return <Container className='query'>{message}</Container>;
 };
 
 export default LightNovel;
