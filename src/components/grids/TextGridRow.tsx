@@ -10,7 +10,7 @@ const TextGridRow = ({ label, text }: TextGridRowProps): React.ReactElement => {
   if (Array.isArray(label) && Array.isArray(text)) {
     if (label.every((x) => x && x !== '')) {
       return (
-        <Grid.Row key={label.toString()} style={{ marginBottom: '10px' }}>
+        <Grid.Row key={label.toString()} className='grid-row'>
           {label
             .map<React.ReactNode>((value, index) => (
               <>
@@ -24,7 +24,7 @@ const TextGridRow = ({ label, text }: TextGridRowProps): React.ReactElement => {
     }
   } else if (label && label !== '') {
     return (
-      <Grid.Row key={label.toString()} style={{ marginBottom: '10px' }}>
+      <Grid.Row key={label.toString()} className='grid-row'>
         <span className='bold'>{label}: </span>
         {text}
       </Grid.Row>

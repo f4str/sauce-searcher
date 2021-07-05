@@ -40,13 +40,19 @@ const Status = (): React.ReactElement => {
   }, []);
 
   return (
-    <Segment inverted style={{ position: 'absolute', top: 0, right: 0 }}>
-      <Menu.Item href='https://github.com/f4str/sauce-searcher' target='_blank'>
-        <Icon name='github' inverted size='large' />
-      </Menu.Item>
+    <div className='Status'>
+      <Segment inverted>
+        <Menu.Item href='https://github.com/f4str/sauce-searcher' target='_blank'>
+          <Icon name='github' inverted size='large' />
+        </Menu.Item>
 
-      <Popup content={text} inverted trigger={<Icon name='circle' size='large' color={color} />} />
-    </Segment>
+        <Popup
+          content={text}
+          inverted
+          trigger={<Icon name='circle' size='large' color={color} />}
+        />
+      </Segment>
+    </div>
   );
 };
 

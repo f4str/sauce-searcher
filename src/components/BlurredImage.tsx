@@ -16,7 +16,7 @@ const ImageGridColumn = ({
 
   if (imageNSFW) {
     return (
-      <Dimmer.Dimmable as={Image} fluid blurring dimmed={blurred}>
+      <Dimmer.Dimmable as={Image} fluid blurring dimmed={blurred} className='image'>
         <Dimmer active={blurred}>
           <Header as='h2' inverted>
             NSFW
@@ -46,6 +46,7 @@ const ImageGridColumn = ({
   return (
     <Image
       src={imageUrl}
+      className='border'
       fluid
       label={{
         color: 'blue',

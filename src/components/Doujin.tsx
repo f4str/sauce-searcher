@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
 import SearchLoader from './SearchLoader';
 import { TextGridColumn, HeaderGridColumn } from './grids';
 
@@ -70,23 +70,25 @@ const Doujin = ({ query }: DoujinProps): React.ReactElement => {
 
   if (found) {
     return (
-      <Grid columns={1} textAlign='left'>
-        <HeaderGridColumn title={id} url={url} />
-        <TextGridColumn label='Title' text={title} />
-        <TextGridColumn label='Pages' text={pages} />
-        <TextGridColumn label='Upload Date' text={uploadDate} />
-        <TextGridColumn label='Characters' text={characters.join(', ')} />
-        <TextGridColumn label='Parodies' text={parodies.join(', ')} />
-        <TextGridColumn label='Tags' text={tags.join(', ')} />
-        <TextGridColumn label='Artists' text={artists.join(', ')} />
-        <TextGridColumn label='Groups' text={groups.join(', ')} />
-        <TextGridColumn label='Languages' text={languages.join(', ')} />
-        <TextGridColumn label='Categories' text={categories.join(', ')} />
-      </Grid>
+      <Container className='query'>
+        <Grid columns={1} textAlign='left'>
+          <HeaderGridColumn title={id} url={url} />
+          <TextGridColumn label='Title' text={title} />
+          <TextGridColumn label='Pages' text={pages} />
+          <TextGridColumn label='Upload Date' text={uploadDate} />
+          <TextGridColumn label='Characters' text={characters.join(', ')} />
+          <TextGridColumn label='Parodies' text={parodies.join(', ')} />
+          <TextGridColumn label='Tags' text={tags.join(', ')} />
+          <TextGridColumn label='Artists' text={artists.join(', ')} />
+          <TextGridColumn label='Groups' text={groups.join(', ')} />
+          <TextGridColumn label='Languages' text={languages.join(', ')} />
+          <TextGridColumn label='Categories' text={categories.join(', ')} />
+        </Grid>
+      </Container>
     );
   }
 
-  return <div>{message}</div>;
+  return <Container className='query'>{message}</Container>;
 };
 
 export default Doujin;
