@@ -1,9 +1,17 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { Container, Grid, Image, Header, Loader } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Container, Grid } from 'semantic-ui-react';
+import SearchLoader from './SearchLoader';
+import BlurredImage from './BlurredImage';
+import {
+  TextGridRow,
+  TextGridColumn,
+  HeaderGridRow,
+  RelationsGridColumn,
+  ListGridColumn,
+} from './grids';
 
 interface AnimeProps {
   query: string;
-  active: string | null;
 }
 
 interface Relations {
@@ -12,7 +20,7 @@ interface Relations {
 
 const api = process.env.REACT_APP_API_SERVER;
 
-const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
+const Anime = ({ query }: AnimeProps): React.ReactElement => {
   const [found, setFound] = useState<boolean>(false);
   const [message, setMessage] = useState<string | React.ReactElement>('');
 
@@ -36,21 +44,12 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
   const [openings, setOpenings] = useState<string[]>([]);
   const [endings, setEndings] = useState<string[]>([]);
 
-  const fetchData = async () => {
-    const loader = (
-      <Loader key='loader' active inline='centered' size='large'>
-        Searching
-      </Loader>
-    );
-    setMessage(loader);
+  const fetchData = async (search: string) => {
+    setMessage(<SearchLoader />);
     setFound(false);
 
-    const first = query.charAt(0);
-    const last = query.slice(-1);
-    const search = first === '{' && last === '}' ? query.slice(1, -1) : query;
-
     const response = await fetch(`${api}/anime/${search}`);
-    if (response.status === 200) {
+    if (response.ok) {
       const data = await response.json();
       setFound(true);
       setTitle(data.title);
@@ -78,111 +77,46 @@ const Anime = forwardRef(({ query, active }: AnimeProps, ref) => {
     }
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      fetchData,
-    };
-  });
-
-  const textGridRow = (name: string, data: string) => {
-    if (data && data !== '') {
-      return (
-        <Grid.Row key={name} style={{ marginBottom: '10px' }}>
-          <span className='bold'>{name}</span>
-          {data}
-        </Grid.Row>
-      );
+  useEffect(() => {
+    if (!query || !/\S/.test(query)) {
+      setFound(false);
+      setMessage('Invalid query');
+    } else {
+      fetchData(query);
     }
+  }, [query]);
 
-    return null;
-  };
+  if (found)
+    return (
+      <Container className='smaller-font'>
+        <Grid columns={2} textAlign='left'>
+          <Grid.Column largeScreen={4} tablet={6} mobile={6}>
+            <BlurredImage imageUrl={imageUrl} score={score} imageNSFW={false} />
+          </Grid.Column>
+          <Grid.Column largeScreen={10} tablet={9} mobile={9}>
+            <HeaderGridRow title={title} url={url} />
+            <TextGridRow label='English Title' text={titleEnglish} />
+            <TextGridRow label={['Type', 'Episodes']} text={[type, episodes]} />
+            <TextGridRow label='Status' text={status} />
+            <TextGridRow label='Rating' text={rating} />
+            <TextGridRow label='Studios' text={studios.join(', ')} />
+            <TextGridRow label='Source' text={source} />
+            <TextGridRow label='Duration' text={duration} />
+            <TextGridRow label='Season' text={premiered} />
+            <TextGridRow label='Aired' text={aired} />
+            <TextGridRow label='Genres' text={genres.join(', ')} />
+          </Grid.Column>
+        </Grid>
+        <Grid columns={1} textAlign='left'>
+          <TextGridColumn label='Synopsis' text={synopsis} />
+          <RelationsGridColumn relations={relations} />
+          <ListGridColumn label='Openings' data={openings} />
+          <ListGridColumn label='Endings' data={endings} />
+        </Grid>
+      </Container>
+    );
 
-  if (active === 'anime') {
-    if (found)
-      return (
-        <Container className='smaller-font'>
-          <Grid columns={2} textAlign='left'>
-            <Grid.Column largeScreen={4} tablet={6} mobile={6}>
-              <Image
-                src={imageUrl}
-                fluid
-                label={{
-                  color: 'blue',
-                  content: score,
-                  icon: 'star',
-                  ribbon: true,
-                }}
-              />
-            </Grid.Column>
-            <Grid.Column largeScreen={10} tablet={9} mobile={9}>
-              <Grid.Row style={{ marginBottom: '10px' }}>
-                <Header inverted textAlign='left'>
-                  <a href={url} className='link'>
-                    {title}
-                  </a>
-                </Header>
-              </Grid.Row>
-              {textGridRow('English Title: ', titleEnglish)}
-              <Grid.Row style={{ marginBottom: '10px' }}>
-                <span className='bold'>Type: </span>
-                {type} | <span className='bold'>Episodes: </span>
-                {episodes}
-              </Grid.Row>
-              {textGridRow('Status: ', status)}
-              {textGridRow('Rating: ', rating)}
-              {textGridRow('Studios: ', studios.join(', '))}
-              {textGridRow('Source: ', source)}
-              {textGridRow('Duration: ', duration)}
-              {textGridRow('Season: ', premiered)}
-              {textGridRow('Aired: ', aired)}
-              {textGridRow('Genres: ', genres.join(', '))}
-            </Grid.Column>
-          </Grid>
-          <Grid columns={1} textAlign='left'>
-            <Grid.Column>
-              <span className='bold'>Synopsis:</span> {synopsis}
-            </Grid.Column>
-            <Grid.Column>
-              {Object.entries(relations).map((r) => {
-                return textGridRow(`${r[0]}: `, r[1].join(', '));
-              })}
-            </Grid.Column>
-            <Grid.Column>
-              <Grid.Row style={{ marginBottom: '5px' }}>
-                <span className='bold'>Openings</span>
-              </Grid.Row>
-              {openings && openings.length > 0
-                ? openings.map((x, i) => {
-                    return (
-                      <Grid.Row key={`op${i + 1}`} style={{ marginBottom: '5px' }}>
-                        {i + 1}. {x}
-                      </Grid.Row>
-                    );
-                  })
-                : 'None'}
-            </Grid.Column>
-            <Grid.Column>
-              <Grid.Row style={{ marginBottom: '5px' }}>
-                <span className='bold'>Endings</span>
-              </Grid.Row>
-              {endings && endings.length > 0
-                ? endings.map((x, i) => {
-                    return (
-                      <Grid.Row key={`ed${i + 1}`} style={{ marginBottom: '5px' }}>
-                        {i + 1}. {x}
-                      </Grid.Row>
-                    );
-                  })
-                : 'None'}
-            </Grid.Column>
-          </Grid>
-        </Container>
-      );
-
-    return <div>{message}</div>;
-  }
-
-  return <div />;
-});
+  return <div>{message}</div>;
+};
 
 export default Anime;

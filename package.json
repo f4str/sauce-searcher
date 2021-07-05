@@ -54,8 +54,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-        "browser": true,
-        "es2021": true
+      "browser": true,
+      "es2021": true
     },
     "extends": [
       "plugin:react/recommended",
@@ -105,13 +105,25 @@
       "react-hooks/exhaustive-deps": "warn",
       "react/jsx-filename-extension": [
         1,
-        { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+        {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ]
+        }
       ]
     },
     "settings": {
       "import/resolver": {
         "node": {
-          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ]
         }
       }
     }

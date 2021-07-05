@@ -1,14 +1,15 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
-import { Grid, Header, Loader } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Grid } from 'semantic-ui-react';
+import SearchLoader from './SearchLoader';
+import { TextGridColumn, HeaderGridColumn } from './grids';
 
 interface DoujinProps {
   query: string;
-  active: string | null;
 }
 
 const api = process.env.REACT_APP_API_SERVER;
 
-const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
+const Doujin = ({ query }: DoujinProps): React.ReactElement => {
   const [found, setFound] = useState<boolean>(false);
   const [message, setMessage] = useState<string | React.ReactElement>('');
 
@@ -25,21 +26,12 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
   const [categories, setCategories] = useState([]);
   const [url, setUrl] = useState('');
 
-  const fetchData = async () => {
-    const loader = (
-      <Loader key='loader' active inline='centered' size='large'>
-        Searching
-      </Loader>
-    );
-    setMessage(loader);
+  const fetchData = async (search: string) => {
+    setMessage(<SearchLoader />);
     setFound(false);
 
-    const first = query.charAt(0);
-    const last = query.slice(-1);
-    const search = first === '(' && last === ')' ? query.slice(1, -1) : query;
-
     const response = await fetch(`${api}/doujin/${search}`);
-    if (response.status === 200) {
+    if (response.ok) {
       const data = await response.json();
       setFound(true);
       setId(data.id);
@@ -67,63 +59,34 @@ const Doujin = forwardRef(({ query, active }: DoujinProps, ref) => {
     }
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      fetchData,
-    };
-  });
-
-  const arrayGridColumn = (name: string, array: string[]) => {
-    if (array && array.length > 0) {
-      return (
-        <Grid.Column>
-          <span className='bold'>{name}</span>
-          {array.join(', ')}
-        </Grid.Column>
-      );
+  useEffect(() => {
+    if (!query || !/\S/.test(query)) {
+      setFound(false);
+      setMessage('Invalid query');
+    } else {
+      fetchData(query);
     }
+  }, [query]);
 
-    return null;
-  };
-
-  if (active === 'doujin') {
-    if (found) {
-      return (
-        <Grid columns={1} textAlign='left'>
-          <Grid.Column>
-            <Header inverted textAlign='left'>
-              <a href={url} className='link'>
-                {id}
-              </a>
-            </Header>
-          </Grid.Column>
-          <Grid.Column>
-            <span className='bold'>Title: </span>
-            {title}
-          </Grid.Column>
-          <Grid.Column>
-            <span className='bold'>Pages: </span>
-            {pages}
-          </Grid.Column>
-          <Grid.Column>
-            <span className='bold'>Upload Date: </span>
-            {uploadDate}
-          </Grid.Column>
-          {arrayGridColumn('Characters: ', characters)}
-          {arrayGridColumn('Parodies: ', parodies)}
-          {arrayGridColumn('Tags: ', tags)}
-          {arrayGridColumn('Artists: ', artists)}
-          {arrayGridColumn('Groups: ', groups)}
-          {arrayGridColumn('Languages: ', languages)}
-          {arrayGridColumn('Categories: ', categories)}
-        </Grid>
-      );
-    }
-
-    return <div>{message}</div>;
+  if (found) {
+    return (
+      <Grid columns={1} textAlign='left'>
+        <HeaderGridColumn title={id} url={url} />
+        <TextGridColumn label='Title' text={title} />
+        <TextGridColumn label='Pages' text={pages} />
+        <TextGridColumn label='Upload Date' text={uploadDate} />
+        <TextGridColumn label='Characters' text={characters.join(', ')} />
+        <TextGridColumn label='Parodies' text={parodies.join(', ')} />
+        <TextGridColumn label='Tags' text={tags.join(', ')} />
+        <TextGridColumn label='Artists' text={artists.join(', ')} />
+        <TextGridColumn label='Groups' text={groups.join(', ')} />
+        <TextGridColumn label='Languages' text={languages.join(', ')} />
+        <TextGridColumn label='Categories' text={categories.join(', ')} />
+      </Grid>
+    );
   }
 
-  return <div />;
-});
+  return <div>{message}</div>;
+};
 
 export default Doujin;
