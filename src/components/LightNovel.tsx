@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Image, Header, Loader } from 'semantic-ui-react';
+import { Container, Grid } from 'semantic-ui-react';
+import SearchLoader from './SearchLoader';
+import BlurredImage from './BlurredImage';
+import { TextGridRow, TextGridColumn, HeaderGridRow, RelationsGridColumn } from './grids';
 
 interface LightNovelProps {
   query: string;
@@ -32,12 +35,7 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
   const [authors, setAuthors] = useState<string[]>([]);
 
   const fetchData = async (search: string) => {
-    const loader = (
-      <Loader key='loader' active inline='centered' size='large'>
-        Searching
-      </Loader>
-    );
-    setMessage(loader);
+    setMessage(<SearchLoader />);
     setFound(false);
 
     const response = await fetch(`${api}/ln/${search}`);
@@ -74,20 +72,7 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
     }
   }, [query]);
 
-  const textGridRow = (name: string, data: string) => {
-    if (data && data !== '') {
-      return (
-        <Grid.Row key={name} style={{ marginBottom: '10px' }}>
-          <span className='bold'>{name}</span>
-          {data}
-        </Grid.Row>
-      );
-    }
-
-    return null;
-  };
-
-  const nameConverter = (names: string[]) => {
+  const nameConverter = (names: string[]): string => {
     return names.map((n) => n.split(', ').reverse().join(' ')).join(', ');
   };
 
@@ -96,51 +81,22 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
       <Container className='smaller-font'>
         <Grid columns={2} textAlign='left'>
           <Grid.Column largeScreen={4} tablet={6} mobile={6}>
-            <Image
-              src={imageUrl}
-              fluid
-              label={{
-                color: 'blue',
-                content: score,
-                icon: 'star',
-                ribbon: true,
-              }}
-            />
+            <BlurredImage imageUrl={imageUrl} score={score} imageNSFW={false} />
           </Grid.Column>
           <Grid.Column largeScreen={10} tablet={9} mobile={9}>
-            <Grid.Row style={{ marginBottom: '10px' }}>
-              <Header inverted textAlign='left'>
-                <a href={url} className='link'>
-                  {title}
-                </a>
-              </Header>
-            </Grid.Row>
-            {textGridRow('English Title: ', titleEnglish)}
-            <Grid.Row style={{ marginBottom: '10px' }}>
-              <span className='bold'>Type: </span>
-              {type} | <span className='bold'>Status: </span>
-              {status}
-            </Grid.Row>
-            <Grid.Row style={{ marginBottom: '10px' }}>
-              <span className='bold'>Volumes: </span>
-              {volumes} | <span className='bold'>Chapters: </span>
-              {chapters}
-            </Grid.Row>
-            {textGridRow('Rating: ', rating)}
-            {textGridRow('Published: ', published)}
-            {textGridRow('Authors: ', nameConverter(authors))}
-            {textGridRow('Genres: ', genres.join(', '))}
+            <HeaderGridRow title={title} url={url} />
+            <TextGridRow label='English Title' text={titleEnglish} />
+            <TextGridRow label={['Type', 'Status']} text={[type, status]} />
+            <TextGridRow label={['Volumes', 'Chapters']} text={[volumes, chapters]} />
+            <TextGridRow label='Rating' text={rating} />
+            <TextGridRow label='Published' text={published} />
+            <TextGridRow label='Authors' text={nameConverter(authors)} />
+            <TextGridRow label='Genres' text={genres.join(', ')} />
           </Grid.Column>
         </Grid>
         <Grid columns={1} textAlign='left'>
-          <Grid.Column>
-            <span className='bold'>Synopsis:</span> {synopsis}
-          </Grid.Column>
-          <Grid.Column>
-            {Object.entries(relations).map((r) => {
-              return textGridRow(`${r[0]}: `, r[1].join(', '));
-            })}
-          </Grid.Column>
+          <TextGridColumn label='Synopsis' text={synopsis} />
+          <RelationsGridColumn relations={relations} />
         </Grid>
       </Container>
     );
