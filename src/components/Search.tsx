@@ -21,11 +21,17 @@ const panes: Pane[] = [
   { menuItem: 'Doujin', placeholder: 'Search by doujin digits' },
 ];
 
+const styles = {
+  container: { width: '50%' },
+  tab: { overflow: 'auto', margin: 'auto', padding: '1px' },
+  input: { width: '100%' },
+};
+
 const Search = (): React.ReactElement => {
   const [placeholder, setPlaceholder] = useState<string>('Search');
   const [index, setIndex] = useState<number>(0);
   const [query, setQuery] = useState<string>('');
-  const [active, setActive] = useState<string | null | React.ReactElement>(null);
+  const [active, setActive] = useState<React.ReactElement | null>(null);
 
   useEffect(() => {
     setPlaceholder(panes[index].placeholder);
@@ -126,8 +132,8 @@ const Search = (): React.ReactElement => {
 
   return (
     <div>
-      <Container style={{ width: '50%' }}>
-        <Segment inverted style={{ overflow: 'auto', margin: 'auto', padding: '1px' }}>
+      <Container style={styles.container}>
+        <Segment inverted style={styles.tab}>
           <Tab
             panes={panes}
             menu={{
@@ -140,30 +146,21 @@ const Search = (): React.ReactElement => {
           />
         </Segment>
         <Input
+          inverted
+          style={styles.input}
+          size='small'
+          placeholder={placeholder}
+          onKeyDown={handleKeyDown}
+          onChange={handleInputChange}
           action={{
             icon: 'search',
             onClick: () => {
               handleClick();
             },
           }}
-          style={{ width: '100%' }}
-          size='small'
-          placeholder={placeholder}
-          inverted
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
         />
       </Container>
-      <Container
-        style={{
-          margin: '30px',
-          padding: '30px',
-          border: active ? '2px solid white' : 'none',
-          lineHeight: 'normal',
-        }}
-      >
-        {active}
-      </Container>
+      <Container>{active}</Container>
     </div>
   );
 };

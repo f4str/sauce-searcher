@@ -8,8 +8,15 @@
   color: white;
 }
 
-.smaller-font {
-  font-size: calc(2px + 2vmin);
+.Status {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.Title {
+  margin: calc(3px + 4vmin);
+  font-size: calc(2px + 2.5vmin);
 }
 
 .bold {
@@ -23,4 +30,24 @@
 .link {
   text-decoration: underline;
   color: inherit;
+}
+
+.image {
+  border: 2px solid white;
+}
+
+.query {
+  border: 2px solid white;
+  margin: calc(3px + 3vmin);
+  padding: calc(3px + 4vmin);
+  font-size: calc(2px + 2vmin);
+  line-height: normal;
+}
+
+.grid-row {
+  margin-bottom: calc(1px + 1vmin);
+}
+
+.half-grid-row {
+  margin-bottom: calc(1px + 0.5vmin);
 }

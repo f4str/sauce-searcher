@@ -4,7 +4,7 @@ import Title from './components/Title';
 import Search from './components/Search';
 import './App.css';
 
-function App(): React.ReactElement {
+const App = (): React.ReactElement => {
   return (
     <div className='App'>
       <Status />
@@ -12,6 +12,6 @@ function App(): React.ReactElement {
       <Search />
     </div>
   );
-}
+};
 
 export default App;
