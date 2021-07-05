@@ -3,9 +3,11 @@ import { Header } from 'semantic-ui-react';
 
 const Title = (): React.ReactElement => {
   return (
-    <Header size='huge' inverted style={{ marginTop: '30px', marginBottom: '20px' }}>
-      Sauce Searcher
-    </Header>
+    <div className='Title'>
+      <Header size='huge' inverted>
+        Sauce Searcher
+      </Header>
+    </div>
   );
 };
 

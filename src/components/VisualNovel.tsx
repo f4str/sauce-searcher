@@ -73,12 +73,12 @@ const VisualNovel = ({ query }: VisualNovelProps): React.ReactElement => {
 
   if (found) {
     return (
-      <Container className='smaller-font'>
+      <Container className='query'>
         <Grid columns={2} textAlign='left'>
-          <Grid.Column width={4} computer={4} largeScreen={4} tablet={6} mobile={6}>
+          <Grid.Column computer={4} largeScreen={4} tablet={6} mobile={6}>
             <BlurredImage imageUrl={imageUrl} score={score} imageNSFW={imageNSFW} />
           </Grid.Column>
-          <Grid.Column width={12} computer={12} largeScreen={12} tablet={10} mobile={10}>
+          <Grid.Column computer={12} largeScreen={12} tablet={10} mobile={10}>
             <HeaderGridRow title={title} url={url} />
             <TextGridRow label='Type' text='Visual Novel' />
             <TextGridRow label='Released' text={released} />
@@ -95,7 +95,7 @@ const VisualNovel = ({ query }: VisualNovelProps): React.ReactElement => {
     );
   }
 
-  return <div>{message}</div>;
+  return <Container className='query'>{message}</Container>;
 };
 
 export default VisualNovel;

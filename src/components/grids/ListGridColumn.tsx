@@ -9,12 +9,12 @@ interface ListGridColumnProps {
 const ListGridColumn = ({ label, data }: ListGridColumnProps): React.ReactElement => {
   return (
     <Grid.Column>
-      <Grid.Row style={{ marginBottom: '5px' }}>
+      <Grid.Row key={label} className='half-grid-row'>
         <span className='bold'>{label}</span>
       </Grid.Row>
       {data && data.length > 0
         ? data.map((x, i) => (
-            <Grid.Row key={`${label}${i + 1}`} style={{ marginBottom: '5px' }}>
+            <Grid.Row key={`${label}${i + 1}`} className='half-grid-row'>
               {i + 1}. {x}
             </Grid.Row>
           ))

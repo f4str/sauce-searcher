@@ -76,12 +76,12 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
 
   if (found)
     return (
-      <Container className='smaller-font'>
+      <Container className='query'>
         <Grid columns={2} textAlign='left'>
-          <Grid.Column width={4} computer={4} largeScreen={4} tablet={6} mobile={6}>
+          <Grid.Column computer={4} largeScreen={4} tablet={6} mobile={6}>
             <BlurredImage imageUrl={imageUrl} score={score} imageNSFW={false} />
           </Grid.Column>
-          <Grid.Column width={12} computer={12} largeScreen={12} tablet={10} mobile={10}>
+          <Grid.Column computer={12} largeScreen={12} tablet={10} mobile={10}>
             <HeaderGridRow title={title} url={url} />
             <TextGridRow label='English Title' text={titleEnglish} />
             <TextGridRow label={['Type', 'Status']} text={[type, status]} />
@@ -98,7 +98,7 @@ const LightNovel = ({ query }: LightNovelProps): React.ReactElement => {
       </Container>
     );
 
-  return <div>{message}</div>;
+  return <Container className='query'>{message}</Container>;
 };
 
 export default LightNovel;
