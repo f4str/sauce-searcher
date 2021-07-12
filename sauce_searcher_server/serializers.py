@@ -3,7 +3,12 @@ import json
 import os
 from typing import Any, Dict, List
 
-from sauce_searcher_server.constants import DOUJIN_BASE_IMAGE, DOUJIN_BASE_URL, VISUAL_NOVEL_BASE_URL, VISUAL_NOVEL_TAGS_FILE
+from sauce_searcher_server.constants import (
+    DOUJIN_BASE_IMAGE,
+    DOUJIN_BASE_URL,
+    VISUAL_NOVEL_BASE_URL,
+    VISUAL_NOVEL_TAGS_FILE,
+)
 from sauce_searcher_server.models import (
     Anime,
     Doujin,
@@ -50,8 +55,7 @@ def format_tag(tag: DoujinTag) -> str:
     return f'{name} ({count:,})'
 
 
-def get_relations(data: Dict[str, List[dict]]) -> Dict[str, List[str]]:
-    related = data.get('related', {})
+def get_relations(related: Dict[str, List[dict]]) -> Dict[str, List[str]]:
     relations = {}
     for k, v in related.items():
         relations[k] = [format_mal_entry(MALEntry(**x), True) for x in v]
@@ -60,7 +64,7 @@ def get_relations(data: Dict[str, List[dict]]) -> Dict[str, List[str]]:
 
 def parse_anime(data: Dict[str, Any]) -> Anime:
     title_english = get_title_english(data)
-    relations = get_relations(data)
+    relations = get_relations(data.get('related', {}))
     studios = [format_mal_entry(MALEntry(**x)) for x in data.get('studios', [])]
     genres = [format_mal_entry(MALEntry(**x)) for x in data.get('genres', [])]
     openings = [format_song(x) for x in data.get('opening_themes', [])]
@@ -95,7 +99,7 @@ def parse_anime(data: Dict[str, Any]) -> Anime:
 
 def parse_manga(data: Dict[str, Any]) -> Manga:
     title_english = get_title_english(data)
-    relations = get_relations(data)
+    relations = get_relations(data.get('related', {}))
     genres = [format_mal_entry(MALEntry(**x)) for x in data.get('genres', [])]
     authors = [format_mal_entry(MALEntry(**x)) for x in data.get('authors', [])]
     serializations = [format_mal_entry(MALEntry(**x)) for x in data.get('serializations', [])]
@@ -124,7 +128,7 @@ def parse_manga(data: Dict[str, Any]) -> Manga:
 
 def parse_light_novel(data: Dict[str, Any]) -> LightNovel:
     title_english = get_title_english(data)
-    relations = get_relations(data)
+    relations = get_relations(data.get('related', {}))
     genres = [format_mal_entry(MALEntry(**x)) for x in data.get('genres', [])]
     authors = [format_mal_entry(MALEntry(**x)) for x in data.get('authors', [])]
 

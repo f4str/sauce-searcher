@@ -1,7 +1,12 @@
 import json
 import socket
 
-from sauce_searcher_server.constants import VNDB_BUFFER_SIZE, VNDB_HOSTNAME, VNDB_PORT, VNDB_DELIMITER
+from sauce_searcher_server.constants import (
+    VNDB_BUFFER_SIZE,
+    VNDB_DELIMITER,
+    VNDB_HOSTNAME,
+    VNDB_PORT,
+)
 
 
 class VNDBSession:
