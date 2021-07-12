@@ -1,6 +1,8 @@
+import datetime
 from typing import Any, Dict, List
 
-from sauce_searcher_server.models import Anime, Doujin, LightNovel, MALEntry, Manga, VisualNovel
+from sauce_searcher_server.constants import DOUJIN_BASE_URL, DOUJIN_BASE_IMAGE
+from sauce_searcher_server.models import Anime, Doujin, LightNovel, MALEntry, Manga, VisualNovel, DoujinTag
 
 
 def get_title_english(data: Dict[str, Any]) -> str:
@@ -29,6 +31,12 @@ def format_mal_entry(relation: MALEntry, show_type=False) -> str:
 def format_song(song: str) -> str:
     start = song.index('"')
     return song[start:]
+
+
+def format_tag(tag: DoujinTag) -> str:
+    name = tag.name
+    count = tag.count
+    return f'{name} ({count:,})'
 
 
 def get_relations(data: Dict[str, List[dict]]) -> Dict[str, List[str]]:
@@ -135,4 +143,51 @@ def parse_visual_novel(data: Dict[str, Any]) -> VisualNovel:
 
 
 def parse_doujin(data: Dict[str, Any]) -> Doujin:
-    pass
+    url = f'{DOUJIN_BASE_URL}{data["id"]}'
+    image = f'{DOUJIN_BASE_IMAGE}{data["media_id"]}/thumb.jpg'
+    upload_date = datetime.datetime.fromtimestamp(data['upload_date'])
+    tags = []
+    languages = []
+    artists = []
+    categories = []
+    parodies = []
+    characters = []
+    groups = []
+
+    all_tags = data.get('tags', [])
+    for tag in all_tags:
+        doujin_tag = DoujinTag(**tag)
+        formatted_tag = format_tag(doujin_tag)
+        type = doujin_tag.type.lower()
+        if type == 'tag':
+            tags.append(formatted_tag)
+        elif type == 'language':
+            languages.append(formatted_tag)
+        elif type == 'artist':
+            artists.append(formatted_tag)
+        elif type == 'category':
+            categories.append(formatted_tag)
+        elif type == 'parody':
+            parodies.append(formatted_tag)
+        elif type == 'character':
+            characters.append(formatted_tag)
+        elif type == 'group':
+            groups.append(formatted_tag)
+
+    doujin = Doujin(
+        id=data['id'],
+        title=data['title']['pretty'],
+        full_title=data['title']['english'],
+        url=url,
+        image=image,
+        pages=data['num_pages'],
+        upload_date=upload_date,
+        tags=tags,
+        languages=languages,
+        artists=artists,
+        categories=categories,
+        parodies=parodies,
+        characters=characters,
+        groups=groups,
+    )
+    return doujin

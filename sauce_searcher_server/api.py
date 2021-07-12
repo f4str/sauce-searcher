@@ -6,6 +6,7 @@ import requests
 from sauce_searcher_server.constants import (
     ANIME_ID_QUERY,
     ANIME_NAME_QUERY,
+    DOUJIN_ID_QUERY,
     LIGHT_NOVEL_ID_QUERY,
     LIGHT_NOVEL_NAME_QUERY,
     MANGA_ID_QUERY,
@@ -100,4 +101,12 @@ def get_visual_novel(query: str) -> VisualNovel:
 
 
 def get_doujin(query: int) -> Doujin:
-    pass
+    url = DOUJIN_ID_QUERY + str(query)
+
+    response = requests.get(url)
+    if response.ok:
+        data = response.json()
+        doujin = parse_doujin(data)
+        return doujin
+    else:
+        raise HTTPException(status_code=404, detail='Doujin not found')

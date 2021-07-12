@@ -11,6 +11,14 @@ class MALEntry(BaseModel):
     url: str
 
 
+class DoujinTag(BaseModel):
+    id: int
+    type: str
+    name: str
+    url: str
+    count: int
+
+
 class Anime(BaseModel):
     id: int
     title: str
