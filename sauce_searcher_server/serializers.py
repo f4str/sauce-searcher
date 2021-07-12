@@ -1,8 +1,19 @@
 import datetime
+import json
+import os
 from typing import Any, Dict, List
 
-from sauce_searcher_server.constants import DOUJIN_BASE_URL, DOUJIN_BASE_IMAGE
-from sauce_searcher_server.models import Anime, Doujin, LightNovel, MALEntry, Manga, VisualNovel, DoujinTag
+from sauce_searcher_server.constants import DOUJIN_BASE_IMAGE, DOUJIN_BASE_URL, VISUAL_NOVEL_BASE_URL, VISUAL_NOVEL_TAGS_FILE
+from sauce_searcher_server.models import (
+    Anime,
+    Doujin,
+    DoujinTag,
+    LightNovel,
+    MALEntry,
+    Manga,
+    VisualNovel,
+    VisualNovelTag,
+)
 
 
 def get_title_english(data: Dict[str, Any]) -> str:
@@ -139,20 +150,67 @@ def parse_light_novel(data: Dict[str, Any]) -> LightNovel:
 
 
 def parse_visual_novel(data: Dict[str, Any]) -> VisualNovel:
-    pass
+    url = f'{VISUAL_NOVEL_BASE_URL}{data["id"]}'
+    released = datetime.datetime.fromisoformat(data['released'])
+    lewd_image = data['image_flagging'] and data['image_flagging']['sexual_avg'] > 1
+    violent_image = data['image_flagging'] and data['image_flagging']['violence_avg'] > 1
+    image_nsfw = lewd_image or violent_image
+    anime = bool(data['anime'])
+    staff = [x['name'] for x in data.get('staff', []) if x['role'].lower() == 'staff']
+
+    lengths = [
+        'N/A',
+        'Very short (<2 hours)',
+        'Short (2 - 10 hours)',
+        'Medium (10 - 30 hours)',
+        'Long (30 - 50 hours)',
+        'Very long (>50 hours)',
+    ]
+    length = lengths[data.get('length', 0)]
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    with open(os.path.join(dir_path, VISUAL_NOVEL_TAGS_FILE)) as f:
+        tag_mappings = json.load(f)
+
+    tags: List[VisualNovelTag] = []
+    for tag in data.get('tags', []):
+        vn_tag = VisualNovelTag(id=tag[0], score=tag[1], spoiler=tag[2])
+        vn_tag.name = tag_mappings.get(str(vn_tag.id))
+        if vn_tag.name and vn_tag.spoiler < 2:
+            tags.append(vn_tag)
+
+    sorted_tags = sorted(tags, key=lambda t: t.score)
+    parsed_tags = [tag.name for tag in sorted_tags]
+
+    visual_novel = VisualNovel(
+        id=data['id'],
+        title=data['title'],
+        url=url,
+        released=released,
+        description=data['description'],
+        image=data['image'],
+        image_nsfw=image_nsfw,
+        tags=parsed_tags,
+        staff=staff,
+        anime=anime,
+        length=length,
+        score=data['rating'],
+        languages=data['languages'],
+    )
+    return visual_novel
 
 
 def parse_doujin(data: Dict[str, Any]) -> Doujin:
     url = f'{DOUJIN_BASE_URL}{data["id"]}'
     image = f'{DOUJIN_BASE_IMAGE}{data["media_id"]}/thumb.jpg'
     upload_date = datetime.datetime.fromtimestamp(data['upload_date'])
-    tags = []
-    languages = []
-    artists = []
-    categories = []
-    parodies = []
-    characters = []
-    groups = []
+    tags: List[str] = []
+    languages: List[str] = []
+    artists: List[str] = []
+    categories: List[str] = []
+    parodies: List[str] = []
+    characters: List[str] = []
+    groups: List[str] = []
 
     all_tags = data.get('tags', [])
     for tag in all_tags:
