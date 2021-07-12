@@ -9,3 +9,12 @@ DOUJIN_ID_QUERY = 'https://nhentai.net/api/gallery/'
 
 DOUJIN_BASE_URL = 'https://nhentai.net/g/'
 DOUJIN_BASE_IMAGE = 'https://t.nhentai.net/galleries/'
+
+VISUAL_NOVEL_BASE_URL = 'https://vndb.org/v'
+VISUAL_NOVEL_TAGS_FILE = 'vn_tags.json'
+
+VNDB_HOSTNAME = 'api.vndb.org'
+VNDB_PORT = 19534
+VNDB_DELIMITER = '\x04'
+VNDB_BUFFER_SIZE = 2 ** 12
+VNDB_QUERY = 'basic,details,anime,tags,stats,staff'

@@ -19,6 +19,13 @@ class DoujinTag(BaseModel):
     count: int
 
 
+class VisualNovelTag(BaseModel):
+    id: int
+    score: int
+    spoiler: int
+    name: Optional[str] = None
+
+
 class Anime(BaseModel):
     id: int
     title: str

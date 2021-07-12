@@ -11,6 +11,7 @@ from sauce_searcher_server.constants import (
     LIGHT_NOVEL_NAME_QUERY,
     MANGA_ID_QUERY,
     MANGA_NAME_QUERY,
+    VNDB_QUERY,
 )
 from sauce_searcher_server.models import Anime, Doujin, LightNovel, Manga, VisualNovel
 from sauce_searcher_server.serializers import (
@@ -20,6 +21,7 @@ from sauce_searcher_server.serializers import (
     parse_manga,
     parse_visual_novel,
 )
+from sauce_searcher_server.vndb import VNDBSession
 
 
 class QueryType(str, Enum):
@@ -32,11 +34,11 @@ class QueryType(str, Enum):
 
 def get_mal_id(query: str, query_type: QueryType) -> int:
     if query_type == QueryType.anime:
-        url = ANIME_NAME_QUERY + query
+        url = f'{ANIME_NAME_QUERY}{query}'
     elif query_type == QueryType.manga:
-        url = MANGA_NAME_QUERY + query
+        url = f'{MANGA_NAME_QUERY}{query}'
     elif query_type == QueryType.light_novel:
-        url = LIGHT_NOVEL_NAME_QUERY + query
+        url = f'{LIGHT_NOVEL_NAME_QUERY}{query}'
     else:
         raise ValueError(f'MAL ID does not exist for {query_type}')
 
@@ -59,7 +61,7 @@ def get_mal_id(query: str, query_type: QueryType) -> int:
 
 def get_anime(query: str) -> Anime:
     mal_id = get_mal_id(query, QueryType.anime)
-    url = ANIME_ID_QUERY + str(mal_id)
+    url = f'{ANIME_ID_QUERY}{mal_id}'
 
     response = requests.get(url)
     if response.ok:
@@ -72,7 +74,7 @@ def get_anime(query: str) -> Anime:
 
 def get_manga(query: str) -> Manga:
     mal_id = get_mal_id(query, QueryType.manga)
-    url = MANGA_ID_QUERY + str(mal_id)
+    url = f'{MANGA_ID_QUERY}{mal_id}'
 
     response = requests.get(url)
     if response.ok:
@@ -85,7 +87,7 @@ def get_manga(query: str) -> Manga:
 
 def get_light_novel(query: str) -> LightNovel:
     mal_id = get_mal_id(query, QueryType.light_novel)
-    url = LIGHT_NOVEL_ID_QUERY + str(mal_id)
+    url = f'{LIGHT_NOVEL_ID_QUERY}{mal_id}'
 
     response = requests.get(url)
     if response.ok:
@@ -97,11 +99,23 @@ def get_light_novel(query: str) -> LightNovel:
 
 
 def get_visual_novel(query: str) -> VisualNovel:
-    pass
+    with VNDBSession() as sess:
+        sess.login()
+        response = sess.get('vn', VNDB_QUERY, f'(title ~ "{query}")')
+
+    results = response.get('items')
+    if results:
+        data = results[0]
+        visual_novel = parse_visual_novel(data)
+        return visual_novel
+    else:
+        raise HTTPException(status_code=404, detail='Visual Novel not found')
+
+
 
 
 def get_doujin(query: int) -> Doujin:
-    url = DOUJIN_ID_QUERY + str(query)
+    url = f'{DOUJIN_ID_QUERY}{query}'
 
     response = requests.get(url)
     if response.ok:
