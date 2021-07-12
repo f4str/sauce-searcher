@@ -112,8 +112,6 @@ def get_visual_novel(query: str) -> VisualNovel:
         raise HTTPException(status_code=404, detail='Visual Novel not found')
 
 
-
-
 def get_doujin(query: int) -> Doujin:
     url = f'{DOUJIN_ID_QUERY}{query}'
 
