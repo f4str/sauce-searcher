@@ -7,6 +7,7 @@ from sauce_searcher_server.constants import (
     DOUJIN_BASE_IMAGE,
     DOUJIN_BASE_URL,
     VISUAL_NOVEL_BASE_URL,
+    VISUAL_NOVEL_LENGTHS,
     VISUAL_NOVEL_TAGS_FILE,
 )
 from sauce_searcher_server.models import (
@@ -19,6 +20,17 @@ from sauce_searcher_server.models import (
     VisualNovel,
     VisualNovelTag,
 )
+
+VN_TAGS = None  # singleton
+
+
+def get_vn_tags():
+    global VN_TAGS
+    if VN_TAGS is None:
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(dir_path, VISUAL_NOVEL_TAGS_FILE)) as f:
+            VN_TAGS = json.load(f)
+    return VN_TAGS
 
 
 def get_title_english(data: Dict[str, Any]) -> str:
@@ -45,7 +57,11 @@ def format_mal_entry(relation: MALEntry, show_type=False) -> str:
 
 
 def format_song(song: str) -> str:
-    start = song.index('"')
+    start = song.find(':')
+    if start > 0:
+        start += 2
+    else:
+        start = 0
     return song[start:]
 
 
@@ -162,19 +178,12 @@ def parse_visual_novel(data: Dict[str, Any]) -> VisualNovel:
     anime = bool(data['anime'])
     staff = [x['name'] for x in data.get('staff', []) if x['role'].lower() == 'staff']
 
-    lengths = [
-        'N/A',
-        'Very short (<2 hours)',
-        'Short (2 - 10 hours)',
-        'Medium (10 - 30 hours)',
-        'Long (30 - 50 hours)',
-        'Very long (>50 hours)',
-    ]
-    length = lengths[data.get('length', 0)]
+    length = VISUAL_NOVEL_LENGTHS[data.get('length', 0)]
 
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    with open(os.path.join(dir_path, VISUAL_NOVEL_TAGS_FILE)) as f:
-        tag_mappings = json.load(f)
+    # dir_path = os.path.dirname(os.path.realpath(__file__))
+    # with open(os.path.join(dir_path, VISUAL_NOVEL_TAGS_FILE)) as f:
+    #     tag_mappings = ujson.load(f)
+    tag_mappings = get_vn_tags()
 
     tags: List[VisualNovelTag] = []
     for tag in data.get('tags', []):

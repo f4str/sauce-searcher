@@ -44,7 +44,7 @@ class VNDBSession:
         return response
 
     def login(self) -> str:
-        config = {'protocol': 1, 'client': 'test', 'clientver': 0.1}
+        config = {'protocol': 1, 'client': 'sauce_searcher_server', 'clientver': 0.1}
         command = f'login {json.dumps(config).replace(" ", "")}{VNDB_DELIMITER}'
         return self.query(command)
 
