@@ -4,28 +4,6 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel
 
 
-class MALEntry(BaseModel):
-    mal_id: int
-    type: str
-    name: str
-    url: str
-
-
-class DoujinTag(BaseModel):
-    id: int
-    type: str
-    name: str
-    url: str
-    count: int
-
-
-class VisualNovelTag(BaseModel):
-    id: int
-    score: int
-    spoiler: int
-    name: Optional[str] = None
-
-
 class Anime(BaseModel):
     id: int
     title: str
@@ -121,3 +99,25 @@ class Doujin(BaseModel):
     parodies: List[str]
     characters: List[str]
     groups: List[str]
+
+
+class MALEntry(BaseModel):
+    mal_id: int
+    type: str
+    name: str
+    url: str
+
+
+class DoujinTag(BaseModel):
+    id: int
+    type: str
+    name: str
+    url: str
+    count: int
+
+
+class VisualNovelTag(BaseModel):
+    id: int
+    score: int
+    spoiler: int
+    name: Optional[str] = None

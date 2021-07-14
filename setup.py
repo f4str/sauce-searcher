@@ -11,13 +11,13 @@ else:
 
 setup(
     name='sauce-searcher-server',
-    version='0.1.0',
+    version='1.0.0',
     description='Sauce Searcher Server',
     long_description=long_description,
     long_description_content_type='text/markdown',
+    url='https://github.com/f4str/sauce-searcher-server',
     license='MIT',
     author='Farhan Ahmed',
-    author_email='farhaahmed@cs.stonybrook.edu',
     keywords='',
     classifiers=[
         'Programming Language :: Python :: 3',
@@ -27,6 +27,6 @@ setup(
     python_requires='>=3.6',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['requests', 'fastapi', 'uvicorn[standard]'],
-    extras_require={'dev': ['tox']},
+    install_requires=['fastapi', 'uvicorn[standard]', 'requests'],
+    extras_require={'dev': ['pytest', 'tox']},
 )

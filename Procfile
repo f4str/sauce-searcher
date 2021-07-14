@@ -1,1 +1,1 @@
-web: uvicorn sauce_searcher_server.main:app --host=0.0.0.0 --port=${PORT:-5000}
+web: uvicorn sauce_searcher_server.main:app --host=0.0.0.0 --port=${PORT}

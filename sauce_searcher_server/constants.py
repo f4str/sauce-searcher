@@ -12,6 +12,14 @@ DOUJIN_BASE_IMAGE = 'https://t.nhentai.net/galleries/'
 
 VISUAL_NOVEL_BASE_URL = 'https://vndb.org/v'
 VISUAL_NOVEL_TAGS_FILE = 'vn_tags.json'
+VISUAL_NOVEL_LENGTHS = [
+    'N/A',
+    'Very short (<2 hours)',
+    'Short (2 - 10 hours)',
+    'Medium (10 - 30 hours)',
+    'Long (30 - 50 hours)',
+    'Very long (>50 hours)',
+]
 
 VNDB_HOSTNAME = 'api.vndb.org'
 VNDB_PORT = 19534

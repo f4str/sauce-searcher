@@ -43,7 +43,7 @@ Or use uvicorn to launch start the server manually
 uvicorn sauce_searcher_server.main:app --port 8000 --reload
 ```
 
-The server will start on port <http://localhost:8000> if a specific port has not been specified.
+The server will start on port <http://localhost:8000> if a specific port is not specified.
 
 ## Making API calls
 
