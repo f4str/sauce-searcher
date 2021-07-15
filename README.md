@@ -34,16 +34,16 @@ pip install -e .[dev]
 Use the shell script `run.sh` to start the server.
 
 ```bash
-./run.sh
+./run.sh [--port PORT] [--host HOST]
 ```
 
 Or use uvicorn to launch start the server manually
 
 ```bash
-uvicorn sauce_searcher_server.main:app --port 8000 --reload
+uvicorn sauce_searcher_server.main:app [--port PORT] [--host HOST] --reload
 ```
 
-The server will start on port <http://localhost:8000> if a specific port is not specified.
+The server will start on <http://localhost:8000> if the port and host are not specified. The `--reload` option restarts the server when files are changed.
 
 ## Making API calls
 
@@ -76,6 +76,7 @@ Examples:
 ### Light Novels
 
 ```http
+http://localhost:8000/light_novel/{name}
 http://localhost:8000/ln/{name}
 ```
 
@@ -88,6 +89,7 @@ Examples:
 ### Visual Novels
 
 ```http
+http://localhost:8000/visual_novel/{name}
 http://localhost:8000/vn/{name}
 ```
 
@@ -95,7 +97,7 @@ Examples:
 
 * `http://localhost:8000/vn/clannad`
 * `http://localhost:8000/vn/kuroinu`
-* `http://localhost:8000/vn/steins;gate`
+* `http://localhost:8000/vn/ef - a fairy tale of two`
 
 ### Doujin
 
@@ -108,6 +110,40 @@ Examples:
 * `http://localhost:8000/doujin/184806`
 * `http://localhost:8000/doujin/50478`
 * `http://localhost:8000/doujin/329071`
+
+## Testing
+
+The `tox` library is used to run all tests and code formatting. This is automatically installed with the dev requirements.
+
+To run linting checks
+
+```bash
+tox -e lint
+```
+
+To run type checks
+
+```bash
+tox -e type
+```
+
+To run pytest unit tests
+
+```bash
+tox -e test
+```
+
+To run all three tests above
+
+```bash
+tox
+```
+
+To format the code to comply with linting conventions
+
+```bash
+tox -e format
+```
 
 ## Disclaimers
 

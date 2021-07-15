@@ -25,8 +25,8 @@ setup(
         'Programming Language :: Python',
     ],
     python_requires='>=3.6',
-    packages=find_packages(),
-    include_package_data=True,
+    packages=find_packages(exclude=['tests', 'tests.*']),
+    package_data={'': ['*.json']},
     install_requires=['fastapi', 'uvicorn[standard]', 'requests'],
     extras_require={'dev': ['pytest', 'tox']},
 )
