@@ -1,8 +1,8 @@
 {
-  "name": "sauce-searcher",
+  "name": "sauce-searcher-client",
   "version": "2.0.0",
   "author": "Farhan Ahmed",
-  "homepage": ".",
+  "homepage": "https://github.com/f4str/sauce-searcher",
   "license": "MIT",
   "private": true,
   "scripts": {
