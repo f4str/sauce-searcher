@@ -73,7 +73,7 @@ Examples:
 * `http://localhost:8000/manga/tokyo ghoul`
 * `http://localhost:8000/manga/a silent voice`
 
-### Light Novels
+### Light Novel
 
 ```http
 http://localhost:8000/light_novel/{name}
@@ -86,7 +86,7 @@ Examples:
 * `http://localhost:8000/ln/konosuba`
 * `http://localhost:8000/ln/your name`
 
-### Visual Novels
+### Visual Novel
 
 ```http
 http://localhost:8000/visual_novel/{name}

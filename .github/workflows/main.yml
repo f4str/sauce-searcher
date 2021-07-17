@@ -1,0 +1,49 @@
+name: Build and test
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-server:
+    defaults:
+      run:
+        working-directory: server
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.8]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install tox
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install tox
+    - name: Run tox
+      run: tox
+
+  test-client:
+    defaults:
+      run:
+        working-directory: client
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_API_SERVER: ${{ secrets.HEROKU_URL }}
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: yarn install --frozen-lockfile
+    - run: yarn lint
+    - run: yarn test
+    - run: yarn build
