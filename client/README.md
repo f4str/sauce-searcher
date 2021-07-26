@@ -1,70 +1,93 @@
 # Sauce Searcher Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The client uses `React` with `TypeScript` to create a frontend web interface. All styling is done using `Semantic UI`. The interface will provide options to search for anime, manga, light novels, visual novels, and doujins.
 
-## Available Scripts
+In order to use the client, the server must be running in the background. The client performs API calls to the server to perform queries and get information. To check if the client has successfully established a connection with the server, view the indicator circle on the top right corner of the application.
 
-In the project directory, you can run:
+## Installation
 
-### `npm start`
+Ensure `Node.js` and `yarn` are installed. Although `yarn` can be installed without any further dependencies, the simplest way is to install it using `npm`.
 
-Runs the app in the development mode.\
-Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
+```bash
+sudo apt update
+sudo apt install nodejs npm
+sudo npm install -g yarn
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Clone the repository.
 
-### `npm test`
+```bash
+git clone https://github.com/f4str/sauce-searcher
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Change directories into this folder.
 
-### `npm run build`
+```bash
+cd sauce-searcher/client
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Install all dependencies using `yarn`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+yarn
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Start the client.
 
-### `npm run eject`
+```bash
+yarn start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The client application will launch on <http://localhost:8080>.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To change the port, edit the `PORT=8080` in the `.env` file to the desired port. Note that the server is reserved on port 8000 so if this is changed, also change the `REACT_APP_API_SERVER=http://localhost:8000` accordingly to the new port.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Building
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+To create a static build of the web application, use `yarn` to run a build.
 
-## Learn More
+```bash
+yarn build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The static site will be available in the `build` directory. To serve the static build, first install `serve`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+sudo yarn install -g serve
+```
 
-### Code Splitting
+Then run serve to start the static build.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+serve -s build -l 8080
+```
 
-### Analyzing the Bundle Size
+## Linting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+All linting is done using `eslint` and `prettier` with various conventions and rules setup. To view or edit any of the rules, view the `package.json` file. Linting checks can be done using `yarn`.
 
-### Making a Progressive Web App
+```bash
+yarn lint
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+To fix any fixable linting issues and format the code to comply with linting conventions, pass the `--fix` command.
 
-### Advanced Configuration
+```bash
+yarn lint --fix
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Testing
 
-### Deployment
+To run unit tests to check if the client application builds without any issues, use `yarn`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+yarn test
+```
 
-### `npm run build` fails to minify
+To view or edit any unit tests view the `src/App.test.tsx` file.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Development
+
+Upon pull request, merge, or push to the `master` branch, linting checks, build tests, and unit tests will be run using GitHub Actions. The workflow will fail if any of the tests fail. See `.github/workflows` for more information on how the CI works.
+
+Upon merge or push to the `master` branch, the server will be deployed to GitHub pages if the three tests pass.

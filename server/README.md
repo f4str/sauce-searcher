@@ -1,29 +1,38 @@
 # Sauce Searcher Server
 
-Rest API server using [FastAPI](https://fastapi.tiangolo.com/) for Python to perform HTTP GET requests to get JSON search results for anime, manga, light novels, visual novels, and doujins.
+The server creates a REST API using `FastAPI` for `Python` to perform HTTP GET requests to get JSON search results for anime, manga, light novels, visual novels, and doujins. Each request performs another API call to the query the information.
+
+Although the server is required for the client, it can be run independently and used for any other application.
 
 ## Installation
+
+Ensure `Python`, `pip`, and `venv` are installed.
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip python3-venv
+```
 
 Clone the repository.
 
 ```bash
-git clone https://github.com/f4str/sauce-searcher-server
+git clone https://github.com/f4str/sauce-searcher
 ```
 
-Change directories into the folder.
+Change directories into this folder.
 
 ```bash
-cd sauce-searcher-server
+cd sauce-searcher/server
 ```
 
-Install Python and create a virtual environment.
+Create a virtual environment using `venv`.
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-Install dependencies using pip.
+Install all dependencies using `pip`.
 
 ```bash
 pip install -e .[dev]
@@ -37,13 +46,13 @@ Use the shell script `run.sh` to start the server.
 ./run.sh [--port PORT] [--host HOST]
 ```
 
-Or use uvicorn to launch start the server manually
+Or use `uvicorn` to launch start the server manually.
 
 ```bash
 uvicorn sauce_searcher_server.main:app [--port PORT] [--host HOST] --reload
 ```
 
-The server will start on <http://localhost:8000> if the port and host are not specified. The `--reload` option restarts the server when files are changed.
+The server will start on <http://localhost:8000> if the port and host are not specified. The `--reload` option restarts the server when files are changed. Omit this flag when running a production build.
 
 ## Making API calls
 
@@ -113,37 +122,43 @@ Examples:
 
 ## Testing
 
-The `tox` library is used to run all tests and code formatting. This is automatically installed with the dev requirements.
+The `tox` library is used to run all tests and code formatting. This is automatically installed with the dev requirements. The available options are as follows:
 
-To run linting checks
+* Run linting checks using `flake8`
 
-```bash
-tox -e lint
-```
+    ```bash
+    tox -e lint
+    ```
 
-To run type checks
+* Run type checks using `mypy`
 
-```bash
-tox -e type
-```
+    ```bash
+    tox -e type
+    ```
 
-To run pytest unit tests
+* Run unit tests `pytest`
 
-```bash
-tox -e test
-```
+    ```bash
+    tox -e test
+    ```
 
-To run all three tests above
+* Run all three of the tests above
 
-```bash
-tox
-```
+    ```bash
+    tox
+    ```
 
-To format the code to comply with linting conventions
+* Format the code using `black` and `isort` to comply with linting conventions
 
-```bash
-tox -e format
-```
+    ```bash
+    tox -e format
+    ```
+
+## Development
+
+Upon pull request, merge, or push to the `master` branch, the three tests with `tox` will be run using GitHub Actions. The workflow will fail if any of the tests fail. See `.github/workflows` for more information on how the CI works.
+
+Upon merge or push to the `master` branch, the server will be deployed to Heroku if the three tests with `tox` pass.
 
 ## Disclaimers
 
