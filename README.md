@@ -1,14 +1,14 @@
 # Sauce Searcher
 
-Sauce searcher is a web interface used to search and get information for anime, manga, light novels, visual novels, and doujins. When built, the application can be run either locally on deployed online to a web service. A sample instance of the application can be found at <https://f4str.github.io/sauce-searcher>.
+Sauce searcher is a fullstack application used to search and get information for anime, manga, light novels, visual novels, and doujins. When built, the application can be run either locally on deployed online to a web service. A sample instance of the application can be found at <https://f4str.github.io/sauce-searcher>.
 
-## Technology
+## Technologies
 
 Since this is a fullstack application, the server and client are separated into two separate directories that need to be run together.
 
-* The server is a `Python` application that uses `FastAPI` to create a REST API to perform HTTP GET requests.
+* The server is a `Python` application that uses `FastAPI` and `uvicorn` to create a REST API to perform HTTP GET requests.
 
-* The client is a `React` with `TypeScript` application that performs API calls to the server.
+* The client is a `Node.js` application with `TypeScript` that uses `React` creates a web interface which performs API calls to the server.
 
 ## Requirements
 
