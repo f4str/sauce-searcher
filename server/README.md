@@ -1,6 +1,6 @@
 # Sauce Searcher Server
 
-The server creates a REST API using `FastAPI` for `Python` to perform HTTP GET requests to get JSON search results for anime, manga, light novels, visual novels, and doujins. Each request performs another API call to the query the information.
+The server creates a REST API using `FastAPI` and `uvicorn` for `Python` to perform HTTP GET requests to get JSON search results for anime, manga, light novels, visual novels, and doujins. Each request performs another API call to the query the information.
 
 Although the server is required for the client, it can be run independently and used for any other application.
 
@@ -160,6 +160,6 @@ Upon pull request, merge, or push to the `master` branch, the three tests with `
 
 Upon merge or push to the `master` branch, the server will be deployed to Heroku if the three tests with `tox` pass.
 
-## Disclaimers
+## Disclaimer
 
 Depending on the number of requests made, you may be throttled or IP banned from the respective site. I am not responsible for any misuse of the server or any of its services.

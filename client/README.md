@@ -1,6 +1,6 @@
 # Sauce Searcher Client
 
-The client uses `React` with `TypeScript` to create a frontend web interface. All styling is done using `Semantic UI`. The interface will provide options to search for anime, manga, light novels, visual novels, and doujins.
+The client uses `Node.js` with `TypeScript` to create a frontend web interface using `React`. All styling is done using `Semantic UI`. The interface provides the ability to search for anime, manga, light novels, visual novels, and doujins. All results will be displayed in an organized grid layout. The interface automatically adjusts based on screen size and as result is also very compatible on mobile.
 
 In order to use the client, the server must be running in the background. The client performs API calls to the server to perform queries and get information. To check if the client has successfully established a connection with the server, view the indicator circle on the top right corner of the application.
 
@@ -88,6 +88,10 @@ To view or edit any unit tests view the `src/App.test.tsx` file.
 
 ## Development
 
-Upon pull request, merge, or push to the `master` branch, linting checks, build tests, and unit tests will be run using GitHub Actions. The workflow will fail if any of the tests fail. See `.github/workflows` for more information on how the CI works.
+Upon pull request, merge, or push to the `master` branch, linting checks, a build test, and unit tests will be run using GitHub Actions. The workflow will fail if any of the tests fail. See `.github/workflows` for more information on how the CI works.
 
-Upon merge or push to the `master` branch, the server will be deployed to GitHub pages if the three tests pass.
+Upon merge or push to the `master` branch, the client will be deployed to GitHub pages if the three tests pass.
+
+## Disclaimer
+
+Since the client relies on the server, any disclaimers and limitations with the server also apply to the client. Excessive use may cause throttling or IP bans. I am not responsible for any misuse of the server or any of its services.
